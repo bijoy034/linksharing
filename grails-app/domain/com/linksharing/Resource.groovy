@@ -17,10 +17,11 @@ class Resource {
         tablePerHierarchy false
     }
     static constraints = {
-        description()
+        description(widget:'textarea')
         createdBy()
         topic()
-        dateCreated()
-        lastUpdated()
+        dateCreated(format:'yyyy-MM-dd')
+        lastUpdated(format:'yyyy-MM-dd')
+
     }
 }

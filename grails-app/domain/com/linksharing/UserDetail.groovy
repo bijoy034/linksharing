@@ -22,14 +22,14 @@ class UserDetail {
 
     static constraints = {
         email(email: true, unique: true, blank: false)
-        username()
+        username(unique: true)
         password(password:true)
         firstName()
         lastName()
         photo()
         admin()
         active()
-        dateCreated()
-        lastUpdated()
+        dateCreated(format:'yyyy-MM-dd')
+        lastUpdated(format:'yyyy-MM-dd')
     }
 }

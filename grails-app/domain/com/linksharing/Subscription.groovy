@@ -13,6 +13,6 @@ class Subscription {
         topic()
         userDetail()
         seriousness()
-        dateCreated()
+        dateCreated(format:'yyyy-MM-dd')
     }
 }

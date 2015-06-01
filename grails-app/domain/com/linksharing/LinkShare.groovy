@@ -5,5 +5,6 @@ class LinkShare extends Resource{
     String url
 
     static constraints = {
+        url url: true
     }
 }

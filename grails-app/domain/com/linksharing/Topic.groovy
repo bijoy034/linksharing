@@ -10,8 +10,14 @@ class Topic {
     static constraints = {
         name()
         visibility()
-        dateCreated()
-        lastUpdated()
-        //userDetail(unique: (Topic))
+        dateCreated(format:'yyyy-MM-dd')
+        lastUpdated(format:'yyyy-MM-dd')
+        name validator: { value, topic, errors ->
+            if ( Topic.countByNameAndCreatedBy(value,topic.createdBy) ) {
+                    errors.rejectValue( "name", "some.text", "User cannot have multiple topic with the same name.")
+                return false
+            }
+            return true
+        }
     }
 }
