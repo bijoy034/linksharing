@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(UserDetailsController)
-class UserDetailsControllerSpec extends Specification {
+@TestFor(SubscriptionController)
+class SubscriptionControllerSpec extends Specification {
 
     def setup() {
     }

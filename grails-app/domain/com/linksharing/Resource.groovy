@@ -2,6 +2,7 @@ package com.linksharing
 
 class Resource {
 
+    String title
     String description
     Date dateCreated
     Date lastUpdated
@@ -17,7 +18,8 @@ class Resource {
         tablePerHierarchy false
     }
     static constraints = {
-        description(widget:'textarea')
+        title(unique: topic)
+        description(widget:'textarea',maxSize: 1024)
         createdBy()
         topic()
         dateCreated(format:'yyyy-MM-dd')
