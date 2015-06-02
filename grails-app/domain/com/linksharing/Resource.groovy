@@ -6,6 +6,7 @@ class Resource {
     String description
     Date dateCreated
     Date lastUpdated
+
     static belongsTo = [
             createdBy:UserDetail,
             topic:Topic
@@ -18,7 +19,7 @@ class Resource {
         tablePerHierarchy false
     }
     static constraints = {
-        title(unique: topic)
+        title(unique: 'topic') // topic not working
         description(widget:'textarea',maxSize: 1024)
         createdBy()
         topic()

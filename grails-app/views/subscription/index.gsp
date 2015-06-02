@@ -24,3 +24,35 @@
 			<thead>
 					<tr>
 					
+						<th><g:message code="subscription.topic.label" default="Topic" /></th>
+					
+						<th><g:message code="subscription.userDetail.label" default="User Detail" /></th>
+					
+						<g:sortableColumn property="seriousness" title="${message(code: 'subscription.seriousness.label', default: 'Seriousness')}" />
+					
+						<g:sortableColumn property="dateCreated" title="${message(code: 'subscription.dateCreated.label', default: 'Date Created')}" />
+					
+					</tr>
+				</thead>
+				<tbody>
+				<g:each in="${subscriptionInstanceList}" status="i" var="subscriptionInstance">
+					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${subscriptionInstance.id}">${fieldValue(bean: subscriptionInstance, field: "topic")}</g:link></td>
+					
+						<td>${fieldValue(bean: subscriptionInstance, field: "userDetail")}</td>
+					
+						<td>${fieldValue(bean: subscriptionInstance, field: "seriousness")}</td>
+					
+						<td><g:formatDate date="${subscriptionInstance.dateCreated}" /></td>
+					
+					</tr>
+				</g:each>
+				</tbody>
+			</table>
+			<div class="pagination">
+				<g:paginate total="${subscriptionInstanceCount ?: 0}" />
+			</div>
+		</div>
+	</body>
+</html>

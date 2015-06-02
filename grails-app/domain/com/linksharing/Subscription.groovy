@@ -7,11 +7,12 @@ class Subscription {
 
     Seriousness seriousness
     Date dateCreated
-    static belongsTo = [topic:Topic]
+
+    static belongsTo = [topic:Topic,userDetail:UserDetail]
 
     static constraints = {
-       // topic(unique: userDetail)
-       // userDetail()
+        topic (unique: 'userDetail')
+        userDetail()
         seriousness()
         dateCreated(format:'yyyy-MM-dd')
     }

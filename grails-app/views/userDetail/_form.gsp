@@ -2,6 +2,24 @@
 
 
 
+<div class="fieldcontain ${hasErrors(bean: userDetailInstance, field: 'firstName', 'error')} required">
+	<label for="firstName">
+		<g:message code="userDetail.firstName.label" default="First Name" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="firstName" required="" value="${userDetailInstance?.firstName}"/>
+
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: userDetailInstance, field: 'lastName', 'error')} required">
+	<label for="lastName">
+		<g:message code="userDetail.lastName.label" default="Last Name" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="lastName" required="" value="${userDetailInstance?.lastName}"/>
+
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: userDetailInstance, field: 'email', 'error')} required">
 	<label for="email">
 		<g:message code="userDetail.email.label" default="Email" />
@@ -26,24 +44,6 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:field type="password" name="password" required="" value="${userDetailInstance?.password}"/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: userDetailInstance, field: 'firstName', 'error')} required">
-	<label for="firstName">
-		<g:message code="userDetail.firstName.label" default="First Name" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="firstName" required="" value="${userDetailInstance?.firstName}"/>
-
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: userDetailInstance, field: 'lastName', 'error')} required">
-	<label for="lastName">
-		<g:message code="userDetail.lastName.label" default="Last Name" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:textField name="lastName" required="" value="${userDetailInstance?.lastName}"/>
 
 </div>
 

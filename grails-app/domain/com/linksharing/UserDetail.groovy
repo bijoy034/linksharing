@@ -5,13 +5,15 @@ class UserDetail {
     String email
     String username
     String password
+    String confirmPassword
     String firstName
     String lastName
     Byte[] photo
-    Boolean admin
-    Boolean active
+    Boolean admin = false
+    Boolean active = true
     Date dateCreated
     Date lastUpdated
+    static transients = ['confirmPassword']
     static hasMany = [
             topic:Topic,
             subscription:Subscription,
@@ -21,11 +23,12 @@ class UserDetail {
     ]
 
     static constraints = {
+        firstName()
+        lastName()
         email(email: true, unique: true, blank: false)
         username(unique: true)
         password(password:true)
-        firstName()
-        lastName()
+        confirmPassword(matches: 'password')
         photo()
         admin()
         active()

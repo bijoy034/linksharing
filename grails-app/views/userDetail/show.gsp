@@ -23,6 +23,24 @@
 			</g:if>
 			<ol class="property-list userDetail">
 			
+				<g:if test="${userDetailInstance?.firstName}">
+				<li class="fieldcontain">
+					<span id="firstName-label" class="property-label"><g:message code="userDetail.firstName.label" default="First Name" /></span>
+					
+						<span class="property-value" aria-labelledby="firstName-label"><g:fieldValue bean="${userDetailInstance}" field="firstName"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${userDetailInstance?.lastName}">
+				<li class="fieldcontain">
+					<span id="lastName-label" class="property-label"><g:message code="userDetail.lastName.label" default="Last Name" /></span>
+					
+						<span class="property-value" aria-labelledby="lastName-label"><g:fieldValue bean="${userDetailInstance}" field="lastName"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${userDetailInstance?.email}">
 				<li class="fieldcontain">
 					<span id="email-label" class="property-label"><g:message code="userDetail.email.label" default="Email" /></span>
@@ -46,24 +64,6 @@
 					<span id="password-label" class="property-label"><g:message code="userDetail.password.label" default="Password" /></span>
 					
 						<span class="property-value" aria-labelledby="password-label"><g:fieldValue bean="${userDetailInstance}" field="password"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${userDetailInstance?.firstName}">
-				<li class="fieldcontain">
-					<span id="firstName-label" class="property-label"><g:message code="userDetail.firstName.label" default="First Name" /></span>
-					
-						<span class="property-value" aria-labelledby="firstName-label"><g:fieldValue bean="${userDetailInstance}" field="firstName"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${userDetailInstance?.lastName}">
-				<li class="fieldcontain">
-					<span id="lastName-label" class="property-label"><g:message code="userDetail.lastName.label" default="Last Name" /></span>
-					
-						<span class="property-value" aria-labelledby="lastName-label"><g:fieldValue bean="${userDetailInstance}" field="lastName"/></span>
 					
 				</li>
 				</g:if>

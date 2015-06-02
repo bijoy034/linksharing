@@ -24,15 +24,15 @@
 			<thead>
 					<tr>
 					
+						<g:sortableColumn property="firstName" title="${message(code: 'userDetail.firstName.label', default: 'First Name')}" />
+					
+						<g:sortableColumn property="lastName" title="${message(code: 'userDetail.lastName.label', default: 'Last Name')}" />
+					
 						<g:sortableColumn property="email" title="${message(code: 'userDetail.email.label', default: 'Email')}" />
 					
 						<g:sortableColumn property="username" title="${message(code: 'userDetail.username.label', default: 'Username')}" />
 					
 						<g:sortableColumn property="password" title="${message(code: 'userDetail.password.label', default: 'Password')}" />
-					
-						<g:sortableColumn property="firstName" title="${message(code: 'userDetail.firstName.label', default: 'First Name')}" />
-					
-						<g:sortableColumn property="lastName" title="${message(code: 'userDetail.lastName.label', default: 'Last Name')}" />
 					
 						<g:sortableColumn property="photo" title="${message(code: 'userDetail.photo.label', default: 'Photo')}" />
 					
@@ -42,15 +42,15 @@
 				<g:each in="${userDetailInstanceList}" status="i" var="userDetailInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${userDetailInstance.id}">${fieldValue(bean: userDetailInstance, field: "email")}</g:link></td>
+						<td><g:link action="show" id="${userDetailInstance.id}">${fieldValue(bean: userDetailInstance, field: "firstName")}</g:link></td>
+					
+						<td>${fieldValue(bean: userDetailInstance, field: "lastName")}</td>
+					
+						<td>${fieldValue(bean: userDetailInstance, field: "email")}</td>
 					
 						<td>${fieldValue(bean: userDetailInstance, field: "username")}</td>
 					
 						<td>${fieldValue(bean: userDetailInstance, field: "password")}</td>
-					
-						<td>${fieldValue(bean: userDetailInstance, field: "firstName")}</td>
-					
-						<td>${fieldValue(bean: userDetailInstance, field: "lastName")}</td>
 					
 						<td>${fieldValue(bean: userDetailInstance, field: "photo")}</td>
 					
