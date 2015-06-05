@@ -25,26 +25,25 @@ class TopicController {
 
     @Transactional
     def save(Topic topicInstance) {
-        if (topicInstance == null) {
-            notFound()
-            return
-        }
 
-        if (topicInstance.hasErrors()) {
-            respond topicInstance.errors, view:'create'
-            return
-        }
+        UserDetail userDetail= session.user
+        userDetail.addToTopic(topicInstance)
 
-        topicInstance.save flush:true
+        //render session.user.properties
+        render  topicInstance.properties
+            if (topicInstance.hasErrors()) {
+                render topicInstance.errors.each {"$it <=======================================>"}
+                println("Error")
+                flash.put("error-msg", topicInstance)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'Topic'), topicInstance.id])
-                redirect topicInstance
+            } else {
+                topicInstance.save flush: true
             }
-            '*' { respond topicInstance, [status: CREATED] }
-        }
+
+      //  redirect(controller: "userDetail", action: 'dashboard')
+
     }
+
 
     def edit(Topic topicInstance) {
         respond topicInstance

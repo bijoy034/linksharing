@@ -358,9 +358,16 @@ Colunms
     z-index: 9505;
     border-radius: 7px;
     padding: 30px;
+   -webkit-animation-name: ease;
     animation-name: ease;
+    -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
     display: none;
+}
+
+@-webkit-keyframes ease {
+    from{  top: 80%;}
+    to{ top: 10%;}
 }
 
 

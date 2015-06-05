@@ -67,22 +67,22 @@
                         <a href="${createLink(uri: '/')}"><asset:image src="placeholders/logo.png" alt=""
                                                                        style="height: 58px"/></a>
                     </div><!--logo-image-->
-
+                   <g:if test="${session.user}">
                     <div class="top-banner">
 
                         <nav id="main-nav">
 
                             <ul id="main-menu" class="clearfix">
-                                <li><a href="#" class="create-topic"><asset:image src="placeholders/comment.png"
+                                <li><a href="#" title="Add topic" class="create-topic"><asset:image src="placeholders/comment.png"
                                                                                   class="modal-form"
                                                                                   alt=""/></a><span></span></li>
-                                <li><a href="#" class="invite"><asset:image src="placeholders/inbox.png"
+                                <li><a href="#" title="Send invitation" class="invite"><asset:image src="placeholders/inbox.png"
                                                                             class="modal-form" style=" height:50px;"
                                                                             alt=""/></a><span></span></li>
-                                <li><a href="#" class="share-link"><asset:image src="placeholders/link.png"
+                                <li><a href="#" title="Share link" class="share-link"><asset:image src="placeholders/link.png"
                                                                                 class="modal-form"
                                                                                 alt=""/></a><span></span></li>
-                                <li><a href="#" class="share-document"><asset:image src="placeholders/file.png"
+                                <li><a href="#" title="Add file" class="share-document"><asset:image src="placeholders/file.png"
                                                                                     class="modal-form"
                                                                                     alt=""/></a><span></span></li>
                                 <li>
@@ -103,6 +103,7 @@
                         </nav>
 
                     </div><!--top-banner-->
+                    </g:if>
 
                 </div><!--header-middle-->
 
@@ -141,28 +142,16 @@
     <div class="create-topic-body" style="display: none">
         <h3 class="widget-title"><span class="title-text ">Create Topic</span></h3>
 
-        <form class="clearfix" action="#" method="post">
-
-            <p class="input-block">
-                <label class="required">Topic Name <span>*</span></label>
-                <input type="text" name="name" class="form-input" value="">
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Visibility <span>*</span></label>
-                <select name="visibility" class="form-input">
-                    <option>Public</option>
-                    <option>Private</option>
-                </select>
-            </p>
+        <g:form class="clearfix"  controller="topic" action="save">
+            <g:render template="/userDetail/addTopic"></g:render>
 
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
-                <input type="submit" class="form-input form-input-button" value="Submit">
+                <g:submitButton class="form-input form-input-button" value="Save" name="topicSave"/>
             </p>
 
             <div class="clear"></div>
-        </form>
+        </g:form>
     </div>
 
     <div class="share-document-body" style="display: none">
@@ -170,25 +159,7 @@
         <h3 class="widget-title"><span class="title-text">Share Document</span></h3>
 
         <form class="clearfix" action="#" method="post">
-
-            <p class="input-block">
-                <label class="required">Document <span>*</span></label>
-                <input type="file" name="name" class="form-input" value="">
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Description <span>*</span></label>
-                <textarea name="name" class="form-input" style="height: 100px !important;"></textarea>
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Topic <span>*</span></label>
-                <select name="visibility" class="form-input">
-                    <option>Topic 1</option>
-                    <option>Topic 2</option>
-                </select>
-            </p>
-
+            <g:render template="/userDetail/shareDoc"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
                 <input type="submit" class="form-input form-input-button" value="Share">
@@ -203,25 +174,7 @@
         <h3 class="widget-title"><span class="title-text">Share Link</span></h3>
 
         <form class="clearfix" action="#" method="post">
-
-            <p class="input-block">
-                <label class="required">Link <span>*</span></label>
-                <input type="url" name="name" class="form-input" value="">
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Description <span>*</span></label>
-                <textarea name="name" class="form-input" style="height: 100px !important;"></textarea>
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Topic <span>*</span></label>
-                <select name="visibility" class="form-input">
-                    <option>Topic 1</option>
-                    <option>Topic 2</option>
-                </select>
-            </p>
-
+           <g:render template="/userDetail/shareLink"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
                 <input type="submit" class="form-input form-input-button" value="Share">
@@ -236,20 +189,7 @@
         <h3 class="widget-title"><span class="title-text ">Send Invitation</span></h3>
 
         <form class="clearfix" action="#" method="post">
-
-            <p class="input-block">
-                <label class="required">Email <span>*</span></label>
-                <input type="email" name="name" class="form-input" value="">
-            </p>
-
-            <p class="input-block clearfix">
-                <label class="required">Topic <span>*</span></label>
-                <select name="visibility" class="form-input">
-                    <option>Topic 1</option>
-                    <option>Topic 2</option>
-                </select>
-            </p>
-
+            <g:render template="/userDetail/invite"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
                 <input type="submit" class="form-input form-input-button" value="Invite">
