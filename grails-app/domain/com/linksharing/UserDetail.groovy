@@ -14,6 +14,12 @@ class UserDetail {
     Date dateCreated
     Date lastUpdated
     static transients = ['confirmPassword']
+    static mapping = {
+        sort dateCreated: 'desc'
+        topic fetch: 'join'
+        subscription fetch: 'join'
+        resource lazy:false
+    }
     static hasMany = [
             topic:Topic,
             subscription:Subscription,
@@ -28,8 +34,14 @@ class UserDetail {
         email(email: true, unique: true, blank: false)
         username(unique: true)
         password(password:true)
-        confirmPassword(matches: 'password')
-        photo()
+        confirmPassword validator: { String value, user, errors ->
+            if ( value?.equals(user?.password) ) {
+                errors.rejectValue( "confirmPassword", "some.text", "Confirm password must be same as password")
+                return false
+            }
+            return true
+        }
+        photo(nullable: true)
         admin()
         active()
         dateCreated(format:'yyyy-MM-dd')

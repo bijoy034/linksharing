@@ -17,6 +17,10 @@ class Resource {
     ]
     static mapping = {
         tablePerHierarchy false
+        description type: 'text'
+        sort lastUpdated: 'desc'
+        readingItem lazy:false
+        resourceRating fetch: 'join'
     }
     static constraints = {
         title(unique: 'topic') // topic not working

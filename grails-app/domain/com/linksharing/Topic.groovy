@@ -7,6 +7,10 @@ class Topic {
     Date lastUpdated
     static belongsTo = [createdBy:UserDetail]
     static hasMany = [subscription:Subscription,resource:Resource]
+    static mapping = {
+        sort lastUpdated: 'desc'
+        subscription fetch: 'join'
+    }
     static constraints = {
         /*name validator: { value, topic, errors ->
             if ( Topic.countByNameAndCreatedBy(value,topic.createdBy) ) {

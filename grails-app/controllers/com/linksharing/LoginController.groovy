@@ -1,43 +1,52 @@
 package com.linksharing
 
+import grails.transaction.Transactional
+
+import static org.springframework.http.HttpStatus.CREATED
+import static org.springframework.http.HttpStatus.NOT_FOUND
+
 class LoginController {
 
     def index() {
-        forward( action:"login")
+        //forward( action:"login")
     }
 
     def login = {
-        if(session.user) {
-            redirect( action:"index")
-            return false
-        }
-    }
-
-    def authenticate = {
-        def user = EndUser.findByUsernameAndPassword(params.username, params.password)
+        def user = UserDetail.findByPasswordAndUsername( params.password,params.loginid)
         if(user){
             session.user = user
-            flash.message = "Hello ${user.fullName}!"
-            redirect(action:"show", id: user.id)
+            flash.message = "Hello ${user.firstName+" "+user.lastName}!"
+           redirect(controller: 'userDetail',action: 'dashboard')
 
         }else{
-            flash.message = "Sorry, ${params.userName}. Please try again."
-            redirect(action:"login")
+            flash.error = "Sorry, ${params.loginid}. Please try again."
+            redirect(url: '/')
         }
     }
 
+
     def logout = {
-        flash.message = "Goodbye ${session.user.firstName}"
+        def user = session.user
+        flash.message = "Goodbye ${user.username}"
         session.user = null
-        redirect(action:"login")
+        redirect(url: '/')
     }
-    def register() {
-        if(session.user) {
-            redirect( action:"login")
-            return false
+
+    @Transactional
+    def register(UserDetail userDetailInstance) {
+
+        if (userDetailInstance.hasErrors()) {
+            flash.put("error-msg",userDetailInstance)
+            redirect(action: 'index')
+        }else{
+                userDetailInstance.save flush:true
+                flash.message = "Hallo ${userDetailInstance.username}"
+                session.user = userDetailInstance
+                redirect(controller: 'userDetail',action: 'dashboard')
         }
-        respond new UserDetail(params)
     }
+
+
 
 
 }

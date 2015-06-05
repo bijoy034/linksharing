@@ -10,6 +10,8 @@ class UserDetailController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def dashboard(){}
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond UserDetail.list(params), model:[userDetailInstanceCount: UserDetail.count()]
