@@ -49,4 +49,11 @@
     </label>
     <g:field type="password" name="confirmPassword" required="required" class="form-input"/>
 </p>
+<p class="input-block ${hasErrors(bean: userDetailInstance, field: 'photo', 'error')}">
+    <label class="required" for="photo">
+        <g:message code="userDetail.photo.label" default="Photo" />
+        <span>*</span>
+    </label>
+    <g:field type="file" name="photo" required="required" class="form-input"/>
+</p>
 

@@ -1,5 +1,7 @@
 package com.linksharing
 
+import org.springframework.web.multipart.MultipartFile
+
 class UserDetail {
 
     String email
@@ -8,12 +10,12 @@ class UserDetail {
     String confirmPassword
     String firstName
     String lastName
-    Byte[] photo
+    MultipartFile photo
     Boolean admin = false
     Boolean active = true
     Date dateCreated
     Date lastUpdated
-    static transients = ['confirmPassword']
+    static transients = ['confirmPassword','photo']
     static mapping = {
         sort dateCreated: 'desc'
         topic fetch: 'join'

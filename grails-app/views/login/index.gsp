@@ -29,7 +29,7 @@
                     <ul>
                         <li>
                             <article class="entry-item clearfix">
-                                <div class="entry-thumb"> <a href="#"><asset:image src="placeholders/53x53/53x53-1.jpg" alt=""/></a> </div>
+                                <div class="entry-thumb"> <a href="#"><asset:image src="placeholders/a11" alt=""/></a> </div>
                                 <p class="entry-description">
                                     <b>Full Name</b>
                                     &nbsp;&nbsp;
@@ -562,14 +562,13 @@
             </g:form>
                 </div><!--tab-content-3-->
                 <div class="tab-content-3" id="tab-3-2">
-                <g:form  class="clearfix reg-form" controller="login" action="register" name="contact-form">
+                <g:uploadForm  class="clearfix reg-form" controller="login" action="register" name="contact-form">
                     <g:render template="register_form"/>
-
                     <p class="contact-button clearfix">
                         <g:submitButton name="submit-contact"  value="Register" />
                     </p>
                     <div class="clear"></div>
-                </g:form>
+                </g:uploadForm>
                 </div><!--tab-content-3-->
 
             </div>
