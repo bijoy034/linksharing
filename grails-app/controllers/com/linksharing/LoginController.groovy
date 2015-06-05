@@ -7,20 +7,23 @@ import static org.springframework.http.HttpStatus.NOT_FOUND
 
 class LoginController {
 
+    static allowedMethods = [login: 'POST', register: 'POST',logout: 'GET']
+
     def index() {
         //forward( action:"login")
     }
 
     def login = {
-        def user = UserDetail.findByPasswordAndUsername(params.password, params.loginid)
+        def user = UserDetail.findByPasswordAndUsername(params.password, params.loginid)?:UserDetail.findByPasswordAndEmail(params.password, params.loginid)
+
         if (user) {
             session.user = user
             flash.message = "Hello ${user.firstName + " " + user.lastName}!"
-            redirect(controller: 'userDetail', action: 'dashboard')
+           // redirect(controller: 'userDetail', action: 'dashboard')
 
         } else {
-            flash.error = "Sorry, ${params.loginid}. Please try again."
-            redirect(url: '/')
+            flash.error = "The email/username and password you entered don't match. "
+           // redirect(url: '/')
         }
     }
 
@@ -29,7 +32,7 @@ class LoginController {
         def user = session.user
         flash.message = "Goodbye ${user.username}"
         session.invalidate()
-        redirect(url: '/')
+       redirect(url: '/')
     }
 
     @Transactional
@@ -45,7 +48,7 @@ class LoginController {
             image.bytes =params.photo.bytes
             flash.message = "Hallo ${userDetailInstance.username}"
             session.user = userDetailInstance
-            redirect(controller: 'userDetail', action: 'dashboard')
+           // redirect(url: '/')
         }
     }
 
