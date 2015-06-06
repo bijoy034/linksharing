@@ -39,19 +39,20 @@ class LoginController {
         withForm {
             if (userDetailInstance.hasErrors()) {
                 flash.put("error-msg", userDetailInstance)
-                redirect(action: 'index')
+                render(view: 'index')
             }else if(userDetailInstance.save(flush: true)){
                 String path= grailsApplication.mainContext.servletContext.getRealPath("images/profile")
                 File image = new File("${path}/${userDetailInstance.username}")
                 image.bytes =params.photo.bytes
                 flash.message = "Hallo ${userDetailInstance.username}"
                 session.user = userDetailInstance
+                render(view: '/userDetail/dashboard')
             } else {
                 flash.put("error-msg", userDetailInstance)
                 redirect(action: 'index')
             }
         }
-        redirect(action: 'index')
+        //redirect(action: 'index')
     }
 
 
