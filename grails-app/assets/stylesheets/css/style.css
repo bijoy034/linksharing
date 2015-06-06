@@ -588,7 +588,7 @@ Header
 }
 .top-banner {
 	float:right;
-	margin:30px 25px 0 0 ;
+	margin:30px 47px 0 0 ;
 }
 
 #header-bottom {
@@ -949,6 +949,11 @@ Widget-area-2
 
 }
 .entry-thumb{
+
+    background-color: transparent !important;
+}
+.entry-thumb a img{
+    width: 53px;
     box-shadow: 0 0 5px rgba(58, 58, 133, 1) !important;
 }
 .widget .entry-item .entry-content .entry-thumb a,

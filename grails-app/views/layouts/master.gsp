@@ -110,9 +110,25 @@
             <!-- header-bottom-->
 
             </header><!--page-header-->
-
+            <div id="main-content">
+    <g:if test="${session.user}">
+            <g:if test="${flash.message}">
+                <label class="message" role="status">${flash.message}</label>
+            </g:if>
+            <g:if test="${flash.error}">
+                <label class="error">${flash.error}</label>
+            </g:if>
+            <g:hasErrors bean="${flash.get("error-msg")}">
+                <ul class="error" role="alert">
+                    <g:eachError bean="${flash.get("error-msg")}" var="error">
+                        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
+                                error="${error}"/></li>
+                    </g:eachError>
+                </ul>
+            </g:hasErrors>
+    </g:if>
         <g:layoutBody/>
-
+            </div>
         <!--bottom-sidebar-->
 
             <footer id="page-footer">
@@ -132,7 +148,7 @@
     </div><!--row-fluid-->
 
 </div><!--wrapper-->
-
+<g:if test="${session.user}">
 <div class="modal-overlay"></div>
 
 
@@ -142,8 +158,8 @@
     <div class="create-topic-body" style="display: none">
         <h3 class="widget-title"><span class="title-text ">Create Topic</span></h3>
 
-        <g:form class="clearfix"  controller="topic" action="save">
-            <g:render template="/userDetail/addTopic"></g:render>
+        <g:form useToken="true" class="clearfix"  controller="topic" action="save">
+            <g:render template="/layouts/addTopic"></g:render>
 
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
@@ -158,48 +174,48 @@
 
         <h3 class="widget-title"><span class="title-text">Share Document</span></h3>
 
-        <form class="clearfix" action="#" method="post">
-            <g:render template="/userDetail/shareDoc"></g:render>
+        <g:uploadForm useToken="true" class="clearfix" controller="documentResource" action="save">
+            <g:render template="/layouts/shareDoc"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
-                <input type="submit" class="form-input form-input-button" value="Share">
+                <g:submitButton name="shareDoc" class="form-input form-input-button" value="Share"/>
             </p>
 
             <div class="clear"></div>
-        </form>
+        </g:uploadForm>
     </div>
 
     <div class="share-link-body" style="display: none">
 
         <h3 class="widget-title"><span class="title-text">Share Link</span></h3>
 
-        <form class="clearfix" action="#" method="post">
-           <g:render template="/userDetail/shareLink"></g:render>
+        <g:form class="clearfix"  useToken="true" controller="linkShare" action="save">
+           <g:render template="/layouts/shareLink"></g:render>
             <p class="contact-button clearfix">
-                <input type="reset" class="form-input form-input-button" value="Cancel">
-                <input type="submit" class="form-input form-input-button" value="Share">
+                <input type="reset" class="form-input form-input-button" value="Cancel"/>
+                <g:submitButton name="shareLink" type="submit" class="form-input form-input-button" value="Share"/>
             </p>
 
             <div class="clear"></div>
-        </form>
+        </g:form>
     </div>
 
     <div class="invite-body" style="display: none">
 
         <h3 class="widget-title"><span class="title-text ">Send Invitation</span></h3>
 
-        <form class="clearfix" action="#" method="post">
-            <g:render template="/userDetail/invite"></g:render>
+        <g:form class="clearfix" useToken="true" action="#" method="post">
+            <g:render template="/layouts/invite"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
                 <input type="submit" class="form-input form-input-button" value="Invite">
             </p>
 
             <div class="clear"></div>
-        </form>
+        </g:form>
     </div>
 </div>
-
+</g:if>
 <asset:javascript src="js/jquery-1.8.3.min.js"/>
 <asset:javascript src="js/superfish.js"/>
 <asset:javascript src="js/bootstrap.js"/>

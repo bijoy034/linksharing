@@ -24,26 +24,21 @@ class DocumentResourceController {
     }
 
     @Transactional
-    def save(DocumentResource documentResourceInstance) {
-        if (documentResourceInstance == null) {
-            notFound()
-            return
-        }
-
-        if (documentResourceInstance.hasErrors()) {
-            respond documentResourceInstance.errors, view:'create'
-            return
-        }
-
-        documentResourceInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'documentResource.label', default: 'DocumentResource'), documentResourceInstance.id])
-                redirect documentResourceInstance
+    def save(DocumentResource documentsResourceInstance) {
+        withForm {
+            def doc = request.getFile('filePath')
+            documentsResourceInstance.fileName = doc.originalFilename
+            if (documentsResourceInstance.hasErrors()) {
+                flash.put("error-msg", documentsResourceInstance)
+            }else if(documentsResourceInstance.save(flush: true)) {
+                String path= grailsApplication.mainContext.servletContext.getRealPath("images/topic")
+                doc.transferTo(new File("${path}/${doc.originalFilename}"))
+                flash.message = "File Resource successfully added!"
+            }else {
+                flash.put("error-msg", documentsResourceInstance)
             }
-            '*' { respond documentResourceInstance, [status: CREATED] }
         }
+        redirect(controller: "userDetail", action: 'dashboard')
     }
 
     def edit(DocumentResource documentResourceInstance) {

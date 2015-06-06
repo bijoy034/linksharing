@@ -9,7 +9,7 @@ class Subscription {
     Date dateCreated
 
     static belongsTo = [topic:Topic,userDetail:UserDetail]
-
+    static mapping = {sort(dateCreated: 'desc')}
     static constraints = {
         topic (unique: 'userDetail')
         userDetail()

@@ -1,6 +1,6 @@
 package com.linksharing
 
-
+import org.springframework.validation.Errors
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -25,22 +25,24 @@ class TopicController {
 
     @Transactional
     def save(Topic topicInstance) {
+        withForm {
+            Subscription subscription = new Subscription(seriousness: Seriousness.Serious)
+            topicInstance.addToSubscription(subscription)
 
-        UserDetail userDetail= session.user
-        userDetail.addToTopic(topicInstance)
+            UserDetail user = UserDetail.load(session.user.id)
+            user.addToTopic(topicInstance)
 
-        //render session.user.properties
-        render  topicInstance.properties
-            if (topicInstance.hasErrors()) {
-                render topicInstance.errors.each {"$it <=======================================>"}
-                println("Error")
-                flash.put("error-msg", topicInstance)
+            user.addToSubscription(subscription)
 
-            } else {
-                topicInstance.save flush: true
-            }
-
-      //  redirect(controller: "userDetail", action: 'dashboard')
+                if(user.hasErrors()){
+                    flash.put("error-msg", user)
+                }else if (user.save(flush: true)) {
+                    flash.message = "Topic successfully added!"
+                }else {
+                    flash.put("error-msg", user)
+                }
+        }
+        redirect(controller: "userDetail", action: 'dashboard')
 
     }
 

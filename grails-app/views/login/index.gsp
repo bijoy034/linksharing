@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div id="main-content">
+
 
     <!--row-fluid-->
 
@@ -615,7 +615,7 @@
 
             <div class="tab-container-3">
                 <div class="tab-content-3" id="tab-3-1">
-                    <g:form class="clearfix log-form" controller="login" action="login" name="contact-form">
+                    <g:form useToken="true" class="clearfix log-form" controller="login" action="login" name="contact-form">
                         <g:render template="login_form"/>
 
                         <p class="contact-button clearfix">
@@ -626,7 +626,7 @@
                     </g:form>
                 </div><!--tab-content-3-->
                 <div class="tab-content-3" id="tab-3-2">
-                    <g:uploadForm class="clearfix reg-form" controller="login" action="register" name="contact-form">
+                    <g:uploadForm useToken="true" class="clearfix reg-form" controller="login" action="register" name="contact-form">
                         <g:render template="register_form"/>
                         <p class="contact-button clearfix">
                             <g:submitButton name="submit-contact" value="Register"/>
@@ -645,6 +645,6 @@
 
     <div class="clear"></div>
 
-</div>
+
 </body>
 </html>

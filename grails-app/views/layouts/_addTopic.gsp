@@ -13,3 +13,4 @@
           <span>*</span></label>
 <g:select  name="visibility" from="${com.linksharing.Visibility}" required="required"  class="form-input"></g:select>
 </p>
+<g:field type="hidden" id="createdBy" name="createdBy.id"  value="${session.user?.id}"/>

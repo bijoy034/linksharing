@@ -1,8 +1,7 @@
 package com.linksharing
 
 class Resource {
-
-    String title
+    //String title
     String description
     Date dateCreated
     Date lastUpdated
@@ -23,12 +22,13 @@ class Resource {
         resourceRating fetch: 'join'
     }
     static constraints = {
-        title(unique: 'topic') // topic not working
+      //  title(unique: 'topic') // topic not working
         description(widget:'textarea',maxSize: 1024)
         createdBy()
         topic()
         dateCreated(format:'yyyy-MM-dd')
         lastUpdated(format:'yyyy-MM-dd')
-
+        readingItem nullable: true
+        resourceRating nullable: true
     }
 }

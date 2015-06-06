@@ -8,7 +8,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class SubscriptionController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
@@ -52,25 +52,15 @@ class SubscriptionController {
 
     @Transactional
     def update(Subscription subscriptionInstance) {
-        if (subscriptionInstance == null) {
-            notFound()
-            return
-        }
 
-        if (subscriptionInstance.hasErrors()) {
-            respond subscriptionInstance.errors, view:'edit'
-            return
+        if(subscriptionInstance.hasErrors()){
+            flash.put("error-msg", subscriptionInstance)
+        }else if (subscriptionInstance.save (flush:true)) {
+            flash.message = "successfully updated!"
+        }else {
+            flash.put("error-msg", subscriptionInstance)
         }
-
-        subscriptionInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Subscription.label', default: 'Subscription'), subscriptionInstance.id])
-                redirect subscriptionInstance
-            }
-            '*'{ respond subscriptionInstance, [status: OK] }
-        }
+        redirect(controller: "userDetail", action: 'dashboard')
     }
 
     @Transactional

@@ -25,25 +25,16 @@ class LinkShareController {
 
     @Transactional
     def save(LinkShare linkShareInstance) {
-        if (linkShareInstance == null) {
-            notFound()
-            return
-        }
-
+    withForm {
         if (linkShareInstance.hasErrors()) {
-            respond linkShareInstance.errors, view:'create'
-            return
+            flash.put("error-msg", linkShareInstance)
+        } else if (linkShareInstance.save(flush: true)) {
+            flash.message = "Link Resource successfully added!"
+        } else {
+            flash.put("error-msg", linkShareInstance)
         }
-
-        linkShareInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'linkShare.label', default: 'LinkShare'), linkShareInstance.id])
-                redirect linkShareInstance
-            }
-            '*' { respond linkShareInstance, [status: CREATED] }
-        }
+    }
+        redirect(controller: "userDetail", action: 'dashboard')
     }
 
     def edit(LinkShare linkShareInstance) {

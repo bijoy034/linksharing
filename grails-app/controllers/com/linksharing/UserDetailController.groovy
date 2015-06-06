@@ -10,7 +10,12 @@ class UserDetailController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def dashboard(){}
+    def dashboard(){
+
+        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(UserDetail.load(session.user?.id))
+
+        [my_subscriptions:subscriptionList]
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

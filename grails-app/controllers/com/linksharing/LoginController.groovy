@@ -14,16 +14,15 @@ class LoginController {
     }
 
     def login = {
-        def user = UserDetail.findByPasswordAndUsername(params.password, params.loginid)?:UserDetail.findByPasswordAndEmail(params.password, params.loginid)
+        withForm {
+            def user = UserDetail.findByPasswordAndUsername(params.password, params.loginid)?:UserDetail.findByPasswordAndEmail(params.password, params.loginid)
+            if (user) {
+                session.user = user
+                flash.message = "Hello ${user.firstName + " " + user.lastName}!"
 
-        if (user) {
-            session.user = user
-            flash.message = "Hello ${user.firstName + " " + user.lastName}!"
-           // redirect(controller: 'userDetail', action: 'dashboard')
-
-        } else {
-            flash.error = "The email/username and password you entered don't match. "
-           // redirect(url: '/')
+            } else {
+                flash.error = "The email/username and password you entered don't match. "
+            }
         }
     }
 
@@ -37,19 +36,22 @@ class LoginController {
 
     @Transactional
     def register(UserDetail userDetailInstance) {
-
-        if (userDetailInstance.hasErrors()) {
-            flash.put("error-msg", userDetailInstance)
-            redirect(action: 'index')
-        } else {
-            userDetailInstance.save flush: true
-            String path= grailsApplication.mainContext.servletContext.getRealPath("images/profile")
-            File image = new File("${path}/${userDetailInstance.username}")
-            image.bytes =params.photo.bytes
-            flash.message = "Hallo ${userDetailInstance.username}"
-            session.user = userDetailInstance
-           // redirect(url: '/')
+        withForm {
+            if (userDetailInstance.hasErrors()) {
+                flash.put("error-msg", userDetailInstance)
+                redirect(action: 'index')
+            }else if(userDetailInstance.save(flush: true)){
+                String path= grailsApplication.mainContext.servletContext.getRealPath("images/profile")
+                File image = new File("${path}/${userDetailInstance.username}")
+                image.bytes =params.photo.bytes
+                flash.message = "Hallo ${userDetailInstance.username}"
+                session.user = userDetailInstance
+            } else {
+                flash.put("error-msg", userDetailInstance)
+                redirect(action: 'index')
+            }
         }
+        redirect(action: 'index')
     }
 
 

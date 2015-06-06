@@ -43,7 +43,6 @@ class UserDetail {
             }
             return true
         }
-        photo(nullable: true)
         admin()
         active()
         dateCreated(format:'yyyy-MM-dd')
