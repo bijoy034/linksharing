@@ -15,19 +15,20 @@ class UserDetail {
     Boolean active = true
     Date dateCreated
     Date lastUpdated
-    static transients = ['confirmPassword','photo']
+    static transients = ['confirmPassword', 'photo']
+
     static mapping = {
         sort dateCreated: 'desc'
         topic fetch: 'join'
         subscription fetch: 'join'
-        resource lazy:false
+        resource lazy: false
     }
     static hasMany = [
-            topic:Topic,
-            subscription:Subscription,
-            resource:Resource,
-            readingItem:ReadingItem,
-            resourceRating:ResourceRating
+            topic         : Topic,
+            subscription  : Subscription,
+            resource      : Resource,
+            readingItem   : ReadingItem,
+            resourceRating: ResourceRating
     ]
 
     static constraints = {
@@ -35,17 +36,18 @@ class UserDetail {
         lastName()
         email(email: true, unique: true, blank: false)
         username(unique: true)
-        password(password:true)
-        confirmPassword validator: { String value, user, errors ->
-            if ( value?.equals(user?.password) ) {
-                errors.rejectValue( "confirmPassword", "some.text", "Confirm password must be same as password")
+        password(password: true)
+        confirmPassword validator: { value, user, errors ->
+            if (!(value?.equals(user?.password))) {
+                errors.rejectValue("confirmPassword", "some.text", "Confirm password must be same as password")
                 return false
             }
             return true
         }
+        confirmPassword bindable: true
         admin()
         active()
-        dateCreated(format:'yyyy-MM-dd')
-        lastUpdated(format:'yyyy-MM-dd')
+        dateCreated(format: 'yyyy-MM-dd')
+        lastUpdated(format: 'yyyy-MM-dd')
     }
 }
