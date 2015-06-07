@@ -1,6 +1,8 @@
 package com.linksharing
 
 import grails.transaction.Transactional
+import grails.validation.Validateable
+import org.springframework.web.multipart.MultipartFile
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
@@ -35,25 +37,51 @@ class LoginController {
     }
 
     @Transactional
-    def register(UserDetail userDetailInstance) {
+    def register(UserDetailCO userDetailCOInstance) {
+        UserDetail userDetail = new UserDetail(userDetailCOInstance)
         withForm {
-            if (userDetailInstance.hasErrors()) {
-                flash.put("error-msg", userDetailInstance)
+            if (userDetailCOInstance.hasErrors()) {
+                flash.put("error-msg", userDetailCOInstance)
                 render(view: 'index')
-            } else if (userDetailInstance.save(flush: true)) {
+            } else if (userDetail.save(flush: true)) {
                 String path = grailsApplication.mainContext.servletContext.getRealPath("images/profile")
-                File image = new File("${path}/${userDetailInstance.username}")
+                File image = new File("${path}/${userDetail.username}")
                 image.bytes = params.photo.bytes
-                flash.message = "Hallo ${userDetailInstance.username}"
-                session.user = userDetailInstance
+                flash.message = "Hallo ${userDetail.username}"
+                session.user = userDetail
                 render(view: '/userDetail/dashboard')
             } else {
-                flash.put("error-msg", userDetailInstance)
-                redirect(action: 'index')
+                flash.put("error-msg", userDetail)
+                render(view: 'index')
             }
         }
         //redirect(action: 'index')
     }
 
+}
+
+@Validateable
+class UserDetailCO {
+    String email
+    String username
+    String password
+    String confirmPassword
+    String firstName
+    String lastName
+    MultipartFile photo
+    Boolean admin = false
+    Boolean active = true
+
+    static constraints = {
+
+        confirmPassword validator: { value, user, errors ->
+            if (!(value?.equals(user?.password))) {
+                errors.rejectValue("confirmPassword", "some.text", "Confirm password must be same as password")
+                return false
+            }
+            return true
+        }
+        importFrom(UserDetail)
+    }
 
 }
