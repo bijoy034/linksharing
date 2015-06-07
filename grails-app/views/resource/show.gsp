@@ -1,111 +1,88 @@
 
-<%@ page import="com.linksharing.Resource" %>
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@page import="com.linksharing.LinkShare;com.linksharing.DocumentResource" %>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'resource.label', default: 'Resource')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#show-resource" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
+<head>
+	<meta name="layout" content="master">
+	<g:set var="entityName" value="${message(code: 'label', default: 'Dashboard')}" />
+	<title><g:message code="default.list.label" args="[entityName]" /></title>
+</head>
+
+<body>
+
+<div id="main-col">
+
+	<div class="widget kopa-article-list-widget">
+		<div class="tab-container-1">
 			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+				<li>
+						<article class="entry-item clearfix">
+							<div class="entry-thumb" style="width: 10%;float: left;"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${post.createdBy.username?:'user.png'}")}" alt=""/></a> </div>
+
+							<div class="entry-content" style="width: 80%;float:left;">
+								<h4 class="entry-title">
+									<a href="#">${post.createdBy.firstName+" "+post.createdBy.lastName}</a>
+									<label style="color:#B2B2B2;display: inline;">@${post.createdBy.username}</label>
+									<label style="color:#B2B2B2;display: inline;"> / 5 mnt before</label>
+								</h4>
+								<a href="#">${post.topic.name}</a>
+								<p class="entry-description" style="max-height: none;overflow: auto;">${post.description}</p>
+								<span class="entry-date">
+									<a href="#"><asset:image src="placeholders/facebook-icon.png" alt="" /></a>
+									<a href="#"><asset:image src="placeholders/Linkedin.png" alt="" /></a>
+									<a href="#"><asset:image src="placeholders/googleplus.png" alt="" /></a>
+									<div class="modify">
+
+										<g:if test="${!post.readingItem*.userDetail.id.contains(session.user.id)}">
+											<a href="#">Mark as read</a>
+										</g:if>
+										<%
+											LinkShare link = LinkShare.get(post.id)
+											DocumentResource doc = DocumentResource.get(post.id)
+										%>
+										<g:if test="${link}">
+											<a href="${link.url}" target="_blank">View full site</a>
+										</g:if>
+										<g:if test="${doc}">
+											<g:link controller="documentResource" action="downloadDoc" id="${post.id}" target="_blank">Download</g:link>
+										</g:if>
+										<g:if test="${post.createdBy.id == session.user?.id}">
+											<a href="#" >Edit</a>
+											<a href="#" >Delete</a>
+										</g:if>
+
+
+									</div>
+								</span>
+							</div>
+						</article>
+					</li>
+
 			</ul>
 		</div>
-		<div id="show-resource" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list resource">
-			
-				<g:if test="${resourceInstance?.title}">
-				<li class="fieldcontain">
-					<span id="title-label" class="property-label"><g:message code="resource.title.label" default="Title" /></span>
-					
-						<span class="property-value" aria-labelledby="title-label"><g:fieldValue bean="${resourceInstance}" field="title"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.description}">
-				<li class="fieldcontain">
-					<span id="description-label" class="property-label"><g:message code="resource.description.label" default="Description" /></span>
-					
-						<span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${resourceInstance}" field="description"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.createdBy}">
-				<li class="fieldcontain">
-					<span id="createdBy-label" class="property-label"><g:message code="resource.createdBy.label" default="Created By" /></span>
-					
-						<span class="property-value" aria-labelledby="createdBy-label"><g:link controller="userDetail" action="show" id="${resourceInstance?.createdBy?.id}">${resourceInstance?.createdBy?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.topic}">
-				<li class="fieldcontain">
-					<span id="topic-label" class="property-label"><g:message code="resource.topic.label" default="Topic" /></span>
-					
-						<span class="property-value" aria-labelledby="topic-label"><g:link controller="topic" action="show" id="${resourceInstance?.topic?.id}">${resourceInstance?.topic?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.dateCreated}">
-				<li class="fieldcontain">
-					<span id="dateCreated-label" class="property-label"><g:message code="resource.dateCreated.label" default="Date Created" /></span>
-					
-						<span class="property-value" aria-labelledby="dateCreated-label"><g:formatDate date="${resourceInstance?.dateCreated}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.lastUpdated}">
-				<li class="fieldcontain">
-					<span id="lastUpdated-label" class="property-label"><g:message code="resource.lastUpdated.label" default="Last Updated" /></span>
-					
-						<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${resourceInstance?.lastUpdated}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.readingItem}">
-				<li class="fieldcontain">
-					<span id="readingItem-label" class="property-label"><g:message code="resource.readingItem.label" default="Reading Item" /></span>
-					
-						<g:each in="${resourceInstance.readingItem}" var="r">
-						<span class="property-value" aria-labelledby="readingItem-label"><g:link controller="readingItem" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${resourceInstance?.resourceRating}">
-				<li class="fieldcontain">
-					<span id="resourceRating-label" class="property-label"><g:message code="resource.resourceRating.label" default="Resource Rating" /></span>
-					
-						<g:each in="${resourceInstance.resourceRating}" var="r">
-						<span class="property-value" aria-labelledby="resourceRating-label"><g:link controller="resourceRating" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form url="[resource:resourceInstance, action:'delete']" method="DELETE">
-				<fieldset class="buttons">
-					<g:link class="edit" action="edit" resource="${resourceInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+	</div><!--kopa-article-list-widget-->
+
+</div><!--main-col-->
+
+<div class="widget-area-3 sidebar">
+
+	<div class="widget kopa-article-list-widget">
+		<g:if test="${session.user}">
+			<g:render template="/layouts/trending_topics"/>
+		</g:if>
+		<g:else>
+			<g:render template="/layouts/user_authenticate"/>
+		</g:else>
+	</div>
+
+</div><!--widget-area-3-->
+
+<!--row-fluid-->
+
+
+
+
+<div class="clear"></div>
+
+</body>
 </html>

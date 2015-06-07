@@ -26,6 +26,8 @@ class DocumentResourceController {
     @Transactional
     def save(DocumentResource documentsResourceInstance) {
         withForm {
+            ReadingItem item = new ReadingItem(userDetail: session.user.id,isRead: true)
+            documentsResourceInstance.addToReadingItem(item)
             def doc = request.getFile('filePath')
             documentsResourceInstance.fileName = doc.originalFilename
             if (documentsResourceInstance.hasErrors()) {
@@ -40,7 +42,14 @@ class DocumentResourceController {
         }
         redirect(controller: "userDetail", action: 'dashboard')
     }
-
+    def downloadDoc(DocumentResource doc){
+        String path= grailsApplication.mainContext.servletContext.getRealPath("images/topic")
+        File file = new File("${path}/${doc.fileName}")
+        response.setHeader("Content-disposition", "attachment; filename=" + file.name)
+       // response.contentType = file.ty
+        response.contentLength = file.bytes.length
+        response.outputStream << file.bytes
+    }
     def edit(DocumentResource documentResourceInstance) {
         respond documentResourceInstance
     }

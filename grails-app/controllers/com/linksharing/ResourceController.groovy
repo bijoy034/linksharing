@@ -16,7 +16,12 @@ class ResourceController {
     }
 
     def show(Resource resourceInstance) {
-        respond resourceInstance
+        if(!resourceInstance){
+            redirect(url: "/")
+        }else {
+            def resource = Resource.get(resourceInstance.id)
+            [post: resource]
+        }
     }
 
     def create() {

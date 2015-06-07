@@ -17,7 +17,7 @@ class Resource {
     static mapping = {
         tablePerHierarchy false
         description type: 'text'
-        sort lastUpdated: 'desc'
+        sort dateCreated: 'desc'
         readingItem lazy:false
         resourceRating fetch: 'join'
     }

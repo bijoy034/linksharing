@@ -11,10 +11,10 @@ class UserDetailController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def dashboard(){
+        UserDetail user = UserDetail.load(session.user?.id)
+        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(user)
 
-        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(UserDetail.load(session.user?.id))
-
-        [my_subscriptions:subscriptionList]
+        [topic_subscription:subscriptionList,users:[UserDetail.get(session.user.id)],posts: subscriptionList*.topic.resource.flatten {ReadingItem.findAllByIsRead(null)}]
     }
 
     def index(Integer max) {

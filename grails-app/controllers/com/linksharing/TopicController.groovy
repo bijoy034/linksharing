@@ -16,7 +16,13 @@ class TopicController {
     }
 
     def show(Topic topicInstance) {
-        respond topicInstance
+        if (!topicInstance) {
+            redirect(url: "/")
+        }else {
+            def subscribe_topic = Subscription.findAllByTopic(topicInstance)
+            def resource = subscribe_topic[0].topic.resource
+        [topic_subscription: subscribe_topic, users: subscribe_topic[0].topic.subscription*.userDetail, posts: resource]
+         }
     }
 
     def create() {
@@ -34,16 +40,15 @@ class TopicController {
 
             user.addToSubscription(subscription)
 
-                if(user.hasErrors()){
-                    flash.put("error-msg", user)
-                }else if (user.save(flush: true)) {
-                    flash.message = "Topic successfully added!"
-                }else {
-                    flash.put("error-msg", user)
-                }
+            if(user.hasErrors()){
+                flash.put("error-msg", user)
+            }else if (user.save(flush: true)) {
+                flash.message = "Topic successfully added!"
+            }else {
+                flash.put("error-msg", user)
+            }
         }
         redirect(controller: "userDetail", action: 'dashboard')
-
     }
 
 

@@ -73,9 +73,11 @@
                         <nav id="main-nav">
 
                             <ul id="main-menu" class="clearfix">
-                                <li><a href="#" title="Add topic" class="create-topic"><asset:image src="placeholders/comment.png"
+                                <li>
+                                    <a href="#" title="Add topic" class="create-topic"><asset:image src="placeholders/comment.png"
                                                                                   class="modal-form"
-                                                                                  alt=""/></a><span></span></li>
+                                                                                  alt=""/></a><span></span>
+                                </li>
                                 <li><a href="#" title="Send invitation" class="invite"><asset:image src="placeholders/inbox.png"
                                                                             class="modal-form" style=" height:50px;"
                                                                             alt=""/></a><span></span></li>
@@ -86,8 +88,6 @@
                                                                                     class="modal-form"
                                                                                     alt=""/></a><span></span></li>
                                 <li>
-
-                                    %{--<a href="#"><asset:image src="placeholders/user.png" alt=""/></a><span></span>--}%
                                     <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.username?:'user.png'}")}" alt=""/></a><span></span>
                                     <ul>
                                         <li><a href="gallery.html">Profile</a></li>

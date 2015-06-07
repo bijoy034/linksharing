@@ -51,7 +51,6 @@ class LoginController {
                 redirect(action: 'index')
             }
         }
-        redirect(action: 'index')
     }
 
 

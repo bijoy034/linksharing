@@ -26,6 +26,8 @@ class LinkShareController {
     @Transactional
     def save(LinkShare linkShareInstance) {
     withForm {
+        ReadingItem item = new ReadingItem(userDetail: session.user.id,isRead: true)
+        linkShareInstance.addToReadingItem(item)
         if (linkShareInstance.hasErrors()) {
             flash.put("error-msg", linkShareInstance)
         } else if (linkShareInstance.save(flush: true)) {
