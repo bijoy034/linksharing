@@ -30,10 +30,10 @@ environments {
 
         dataSource {
             username = "root"
-            password = "root"
+            password = "12345"
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:mysql://localhost:3306/linksharing?autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8"
-            logSql = true
+            //logSql = true
         }
     }
     test {

@@ -18,4 +18,5 @@ web-app/WEB-INF/credentials/AwsCredentials.properties
 dump/
 tbip.iml
 prodDb*
-DataSource.groovy
+grails-app/conf/DataSource.groovy
+web-app/images/profile/
