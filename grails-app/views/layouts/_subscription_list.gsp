@@ -7,8 +7,8 @@
             <g:form controller="subscription" action="update" class="edit-subscription">
                     <article class="entry-item clearfix">
                         <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.username?:'user.png'}")}" alt="" /></a> </div>
-
-                        <table >
+                        <div style="width: 75%;float: left;">
+                            <table >
                             <tr class="entry-content show-text">
                                 <th colspan="4" style="text-align: left;  padding-left: 12px;">
                                     <g:link controller="subscription" action="list" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link>
@@ -42,6 +42,7 @@
                             </tr>
 
                         </table>
+                        </div>
                         <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
                             <g:select class="select"  name="topic.visibility" from="${com.linksharing.Visibility}" value="${subscribe.topic.visibility}" required="required"></g:select>
                         </g:if>
