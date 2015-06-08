@@ -1,11 +1,18 @@
 package com.linksharing
 
+import com.linksharing.co.ResourceCO
+
 class Resource {
     //String title
     String description
     Date dateCreated
     Date lastUpdated
 
+    Resource(ResourceCO resourceCO){
+        this.description = resourceCO.description
+        this.createdBy = resourceCO.createdBy
+        this.topic = resourceCO.topic
+    }
     static belongsTo = [
             createdBy:UserDetail,
             topic:Topic

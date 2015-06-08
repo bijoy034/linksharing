@@ -1,12 +1,15 @@
 package com.linksharing
 
-
+import com.linksharing.co.DocumentResourceCO
+import grails.validation.ValidationException
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class DocumentResourceController {
+    def resourceService
+    def fileService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -24,31 +27,31 @@ class DocumentResourceController {
     }
 
     @Transactional
-    def save(DocumentResource documentsResourceInstance) {
+    def save(DocumentResourceCO documentsResourceInstance) {
         withForm {
-            ReadingItem item = new ReadingItem(userDetail: session.user?.id,isRead: true)
-            documentsResourceInstance.addToReadingItem(item)
-            def doc = request.getFile('filePath')
-            documentsResourceInstance.fileName = doc.originalFilename
-            if (documentsResourceInstance.hasErrors()) {
-                flash.put("error-msg", documentsResourceInstance)
-            }else if(documentsResourceInstance.save(flush: true)) {
+            try{
                 String path= grailsApplication.mainContext.servletContext.getRealPath("images/topic")
-                doc.transferTo(new File("${path}/${doc.originalFilename}"))
-                flash.message = "File Resource successfully added!"
-            }else {
+                DocumentResource resource = resourceService.shareDocument(documentsResourceInstance,session.user as UserDetail,path )
+                flash.message = "Document Resource successfully added!"
+                redirect(controller: "resource", action: 'show',id: resource.id)
+            }catch(ValidationException e){
+                documentsResourceInstance.errors = e.errors
                 flash.put("error-msg", documentsResourceInstance)
+                redirect(controller: "userDetail", action: 'dashboard')
+            }catch(Throwable e){
+                flash.error = e.getMessage()
+                redirect(controller: "userDetail", action: 'dashboard')
             }
         }
-        redirect(controller: "userDetail", action: 'dashboard')
     }
     def downloadDoc(DocumentResource doc){
-        String path= grailsApplication.mainContext.servletContext.getRealPath("images/topic")
-        File file = new File("${path}/${doc.fileName}")
-        response.setHeader("Content-disposition", "attachment; filename=" + file.name)
-       // response.contentType = file.ty
-        response.contentLength = file.bytes.length
-        response.outputStream << file.bytes
+        try {
+            String path = grailsApplication.mainContext.servletContext.getRealPath("images/topic")
+            fileService.download(response, doc.fileName, path)
+        }catch(Throwable e){
+            flash.error = e.getMessage()
+            redirect(url:"/")
+        }
     }
     def edit(DocumentResource documentResourceInstance) {
         respond documentResourceInstance

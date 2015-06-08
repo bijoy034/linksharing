@@ -5,7 +5,7 @@
 <g:if test="${flash.error}">
     <label class="error">${flash.error}</label>
 </g:if>
-<g:hasErrors bean="${flash.get("error-msg")}">
+<g:hasErrors bean="${flash.get("error-msg")}" >
     <ul class="error" role="alert">
         <g:eachError bean="${flash.get("error-msg")}" var="error">
             <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message

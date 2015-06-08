@@ -7,14 +7,18 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class UserDetailController {
+    def userService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def dashboard(){
-        UserDetail user = UserDetail.load(session.user?.id)
-        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(user,[max:5])
-
-        [topic_subscription:subscriptionList,users:[UserDetail.get(session.user?.id)],posts: subscriptionList*.topic.resource.flatten {ReadingItem.findAllByIsRead(null)}]
+        try {
+            userService.dashboard(session.user as UserDetail)
+        }catch (Throwable e){
+            flash.error = e.getMessage()
+            session.invalidate()
+            redirect(url: '/')
+        }
     }
 
     def index(Integer max) {

@@ -4,7 +4,7 @@
          <g:each in="${users}" status="i" var="user">
             <li>
                 <article class="entry-item clearfix">
-                    <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${user.username?:'user.png'}")}" style="width: 110px;" alt=""></a> </div>
+                    <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${user.photo?:'user.png'}")}" style="width: 110px;" alt=""></a> </div>
                     <h4 class="entry-title">
                         <a href="#">${user.firstName+" "+user.lastName}</a>
                         <label style="color:#B2B2B2;">@${user.username}</label>

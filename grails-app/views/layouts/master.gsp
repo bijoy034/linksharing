@@ -93,7 +93,7 @@
                                                                                     class="modal-form"
                                                                                     alt=""/></a><span></span></li>
                                 <li>
-                                    <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.username?:'user.png'}")}" alt=""/></a><span></span>
+                                    <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt=""/></a><span></span>
                                     <ul>
                                         <li><a href="gallery.html">Profile</a></li>
                                         <li><a href="video.html">Users</a></li>

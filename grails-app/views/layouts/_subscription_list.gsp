@@ -6,7 +6,7 @@
         <li>
             <g:form controller="subscription" action="update" class="edit-subscription">
                     <article class="entry-item clearfix">
-                        <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.username?:'user.png'}")}" alt="" /></a> </div>
+                        <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.photo?:'user.png'}")}" alt="" /></a> </div>
                         <div style="width: 75%;float: left;">
                             <table >
                             <tr class="entry-content show-text">

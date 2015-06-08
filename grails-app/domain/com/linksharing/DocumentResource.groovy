@@ -1,10 +1,14 @@
 package com.linksharing
 
-import org.springframework.web.multipart.MultipartFile
+import com.linksharing.co.DocumentResourceCO
 
 class DocumentResource extends Resource{
 
     String fileName
+    DocumentResource(DocumentResourceCO co){
+        super(co)
+        this.fileName = co.filePath.originalFilename
+    }
 
     static constraints = {
         fileName nullable: true

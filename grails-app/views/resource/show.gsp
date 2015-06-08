@@ -17,7 +17,7 @@
 			<ul>
 				<li>
 						<article class="entry-item clearfix">
-							<div class="entry-thumb" style="width: 10%;float: left;"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${post.createdBy.username?:'user.png'}")}" alt=""/></a> </div>
+							<div class="entry-thumb" style="width: 10%;float: left;"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${post.createdBy.photo?:'user.png'}")}" alt=""/></a> </div>
 
 							<div class="entry-content" style="width: 80%;float:left;">
 								<h4 class="entry-title">

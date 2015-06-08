@@ -1,5 +1,6 @@
 package com.linksharing
 
+import grails.validation.ValidationException
 import org.springframework.validation.Errors
 
 import static org.springframework.http.HttpStatus.*
@@ -7,6 +8,7 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class TopicController {
+    def topicService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -15,24 +17,36 @@ class TopicController {
         respond Topic.list(params), model:[topicInstanceCount: Topic.count()]
     }
     def list(Topic topicInstance ) {
-        UserDetail user = UserDetail.load(session.user?.id)
-        List<Topic> topicList = Topic.list()
-        List<Resource> post;
-        if(topicInstance){
-            post = Resource.findAllByTopic(Topic.load(topicInstance?.id))
-        }else{
-            post = topicList[0].resource as List
+        try {
+            List<Topic> topicList = topicService.listTopic()
+            List<Resource> post;
+            if (topicList.size() > 0) {
+                if (topicInstance) {
+                    post = topicService.listAllTopicPosts(topicInstance)
+                } else {
+                    post = topicList[0].resource as List
+                }
+                [topicList: topicList, posts: post]
+            } else {
+                redirect(url: "/")
+            }
+        }catch(Throwable e){
+            flash.error = e
+            redirect(url: "/")
         }
 
-        [topicList:topicList,posts: post]
+
     }
     def show(Topic topicInstance) {
-        if (!topicInstance && session.user) {
+        try {
+            if (!topicInstance && session.user) {
+                redirect(controller: "topic", action: "list")
+            } else if (topicInstance && session.user) {
+                topicService.showTopic(topicInstance)
+            }
+        }catch(Throwable e){
+            flash.error = e.getMessage()
             redirect(controller: "topic", action: "list")
-        }else if(topicInstance && session.user){
-            List<Topic> topicList = [Topic.load(topicInstance.id)]
-            List<Resource> post = topicList[0].resource as List
-            [topicList:topicList,users: topicList[0].subscription*.userDetail,posts: post]
         }
     }
 
@@ -44,20 +58,20 @@ class TopicController {
     @Transactional
     def save(Topic topicInstance) {
         withForm {
-            UserDetail user = UserDetail.load(session.user?.id)
-            Subscription subscription = new Subscription(seriousness: Seriousness.Serious,userDetail: user)
-            topicInstance.createdBy = user
-            topicInstance.addToSubscription(subscription)
-
-            if(topicInstance.hasErrors()){
-                flash.put("error-msg", user)
-            }else if (topicInstance.save(flush: true)) {
+            try {
+                Topic topic = topicService.saveTopic(topicInstance, session.user as UserDetail)
                 flash.message = "Topic successfully added!"
-            }else {
+                redirect(controller: "topic", action: 'show',id: topic.id)
+            }catch (ValidationException e) {
+                topicInstance.errors = e.errors
                 flash.put("error-msg", topicInstance)
+                redirect(controller: "userDetail", action: 'dashboard')
+            }catch(Throwable e){
+                flash.error = e.getMessage()
+                redirect(controller: "userDetail", action: 'dashboard')
             }
         }
-        redirect(controller: "userDetail", action: 'dashboard')
+
     }
 
 

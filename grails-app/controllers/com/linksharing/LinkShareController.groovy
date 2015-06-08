@@ -1,12 +1,14 @@
 package com.linksharing
 
-
+import grails.validation.ValidationException
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class LinkShareController {
+
+    def resourceService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -25,18 +27,21 @@ class LinkShareController {
 
     @Transactional
     def save(LinkShare linkShareInstance) {
-    withForm {
-        ReadingItem item = new ReadingItem(userDetail: session.user?.id,isRead: true)
-        linkShareInstance.addToReadingItem(item)
-        if (linkShareInstance.hasErrors()) {
-            flash.put("error-msg", linkShareInstance)
-        } else if (linkShareInstance.save(flush: true)) {
-            flash.message = "Link Resource successfully added!"
-        } else {
-            flash.put("error-msg", linkShareInstance)
+        withForm {
+            try{
+                resourceService.shareLink(linkShareInstance,session.user as UserDetail)
+                flash.message = "Link Resource successfully added!"
+                redirect(controller: "resource", action: 'show',id: linkShareInstance.id)
+            }catch(ValidationException e){
+                linkShareInstance.errors = e.errors
+                flash.put("error-msg", linkShareInstance)
+                redirect(controller: "userDetail", action: 'dashboard')
+            }catch(Throwable e){
+                flash.error = e.getMessage()
+                redirect(controller: "userDetail", action: 'dashboard')
+            }
         }
-    }
-        redirect(controller: "userDetail", action: 'dashboard')
+
     }
 
     def edit(LinkShare linkShareInstance) {

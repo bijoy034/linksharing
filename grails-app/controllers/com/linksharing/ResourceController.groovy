@@ -8,6 +8,7 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class ResourceController {
 
+    def resourceService
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -16,11 +17,16 @@ class ResourceController {
     }
 
     def show(Resource resourceInstance) {
-        if(!resourceInstance && session.user){
+        try {
+            if(!resourceInstance && session.user){
+                redirect(url: "/")
+            }else if(resourceInstance && session.user){
+                Resource resource = resourceService.showResource(resourceInstance)
+                [post: resource]
+            }
+        }catch(Throwable e){
+            flash.error = e
             redirect(url: "/")
-        }else if(resourceInstance && session.user){
-            def resource = Resource.get(resourceInstance.id)
-            [post: resource]
         }
     }
 
