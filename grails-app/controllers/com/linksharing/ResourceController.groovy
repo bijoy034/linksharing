@@ -16,9 +16,9 @@ class ResourceController {
     }
 
     def show(Resource resourceInstance) {
-        if(!resourceInstance){
+        if(!resourceInstance && session.user){
             redirect(url: "/")
-        }else {
+        }else if(resourceInstance && session.user){
             def resource = Resource.get(resourceInstance.id)
             [post: resource]
         }

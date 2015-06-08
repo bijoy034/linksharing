@@ -3,7 +3,8 @@
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/html"><!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <title>LinkSharing :: <g:layoutTitle default="Home"/></title>
@@ -20,8 +21,6 @@
     <asset:stylesheet src="css/responsive.css"/>
     <asset:stylesheet src="css/coban.css"/>
 
-    <link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <asset:javascript src="js/modernizr.custom.js"/>
 
@@ -74,9 +73,15 @@
 
                             <ul id="main-menu" class="clearfix">
                                 <li>
-                                    <a href="#" title="Add topic" class="create-topic"><asset:image src="placeholders/comment.png"
-                                                                                  class="modal-form"
-                                                                                  alt=""/></a><span></span>
+                                    <a href="#" ><asset:image src="placeholders/comment.png" alt=""/></a><span></span>
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="create-topic"  title="Add topic" >
+                                                <label class="modal-form" style="font-size: 20px;">AddTopic</label>
+                                            </a>
+                                        </li>
+                                        <li><g:link controller="topic" action="list">List&nbsp;Topics</g:link></li>
+                                    </ul>
                                 </li>
                                 <li><a href="#" title="Send invitation" class="invite"><asset:image src="placeholders/inbox.png"
                                                                             class="modal-form" style=" height:50px;"

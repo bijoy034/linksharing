@@ -26,7 +26,7 @@ class DocumentResourceController {
     @Transactional
     def save(DocumentResource documentsResourceInstance) {
         withForm {
-            ReadingItem item = new ReadingItem(userDetail: session.user.id,isRead: true)
+            ReadingItem item = new ReadingItem(userDetail: session.user?.id,isRead: true)
             documentsResourceInstance.addToReadingItem(item)
             def doc = request.getFile('filePath')
             documentsResourceInstance.fileName = doc.originalFilename

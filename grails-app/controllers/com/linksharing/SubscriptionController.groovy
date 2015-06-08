@@ -8,13 +8,23 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class SubscriptionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
+    static allowedMethods = [save: "GET", update: "POST", delete: "DELETE"]
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Subscription.list(params), model:[subscriptionInstanceCount: Subscription.count()]
     }
-
+    def list(Topic topicInstance ) {
+        UserDetail user = UserDetail.load(session.user?.id)
+        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(user)
+        List<Resource> post;
+        if(topicInstance){
+            post = Resource.findAllByTopic(Topic.load(topicInstance?.id))
+        }else{
+            post = subscriptionList[0].topic.resource as List
+        }
+        [topic_subscription:subscriptionList,posts: post]
+    }
     def show(Subscription subscriptionInstance) {
         respond subscriptionInstance
     }
@@ -23,27 +33,25 @@ class SubscriptionController {
         respond new Subscription(params)
     }
 
+
+
     @Transactional
-    def save(Subscription subscriptionInstance) {
-        if (subscriptionInstance == null) {
-            notFound()
-            return
+    def save(Long topic_id) {
+        Subscription subscriptionInstance = new Subscription(seriousness: Seriousness.Serious,topic: Topic.load(topic_id), userDetail: UserDetail.load(session.user?.id))
+        if(subscriptionInstance.hasErrors()){
+            flash.put("error-msg", subscriptionInstance)
+        }else if (subscriptionInstance.save (flush:true)) {
+            flash.message = "successfully topic subscribed!"
+        }else {
+            flash.put("error-msg", subscriptionInstance)
         }
-
-        if (subscriptionInstance.hasErrors()) {
-            respond subscriptionInstance.errors, view:'create'
-            return
-        }
-
-        subscriptionInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'subscription.label', default: 'Subscription'), subscriptionInstance.id])
-                redirect subscriptionInstance
-            }
-            '*' { respond subscriptionInstance, [status: CREATED] }
-        }
+        redirect(controller: "topic", action: 'show', id:topic_id)
+    }
+    @Transactional
+    def remove(Long topic_id) {
+        Subscription.findByTopicAndUserDetail(Topic.load(topic_id), UserDetail.load(session.user?.id)).delete(flush: true)
+        flash.message = "Topic Unsubscribed!"
+        redirect(controller: "topic", action: 'show', id:topic_id)
     }
 
     def edit(Subscription subscriptionInstance) {
@@ -52,15 +60,14 @@ class SubscriptionController {
 
     @Transactional
     def update(Subscription subscriptionInstance) {
-
         if(subscriptionInstance.hasErrors()){
             flash.put("error-msg", subscriptionInstance)
         }else if (subscriptionInstance.save (flush:true)) {
-            flash.message = "successfully updated!"
+            flash.message = "successfully topic subscribed!"
         }else {
             flash.put("error-msg", subscriptionInstance)
         }
-        redirect(controller: "userDetail", action: 'dashboard')
+        redirect(controller: "topic", action: 'show', id:subscriptionInstance.topic.id)
     }
 
     @Transactional

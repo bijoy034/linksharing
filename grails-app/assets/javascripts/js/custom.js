@@ -32,7 +32,7 @@ jQuery(document).ready(function(){
 		elem.parent('tbody').parent('table').find(".show-text").show();
 		elem.hide();
 	});
-	jQuery(".edit-subscription select").change(function(){
+	jQuery(".edit-subscription .select").change(function(){
 		$(this).parent("article").parent("form").submit();
 	});
 

@@ -1,17 +1,18 @@
 
 <div class="tab-container-1">
     <g:if test="${topic_subscription.size() > 0}">
-    ${topic_subscription.size() >5?'<a href="#">View All</a>':'' }
     <ul>
 <g:each in="${topic_subscription}" status="i" var="subscribe">
         <li>
             <g:form controller="subscription" action="update" class="edit-subscription">
                     <article class="entry-item clearfix">
-                        <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.userDetail.username?:'user.png'}")}" alt="" /></a> </div>
+                        <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.username?:'user.png'}")}" alt="" /></a> </div>
 
                         <table >
                             <tr class="entry-content show-text">
-                                <th colspan="4" style="text-align: left;  padding-left: 12px;"><g:link controller="topic" action="show" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link></th>
+                                <th colspan="4" style="text-align: left;  padding-left: 12px;">
+                                    <g:link controller="subscription" action="list" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link>
+                                </th>
                             </tr>
                             <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
                                 <tr class="entry-content edit-text" style="display: none;">
@@ -21,22 +22,31 @@
                                 </tr>
                             </g:if>
                             <tr class="entry-content">
-                                <th colspan="2" style="color: #B2B2B2;">@${subscribe.userDetail.username}</th>
+                                <th colspan="2" style="color: #B2B2B2;">@${subscribe.topic.createdBy.username}</th>
                                 <th>Subscriptions</th>
                                 <th>Post</th> 
                             </tr>
                             <tr class="entry-content">
-                                <td colspan="2"><a href="#">${subscribe.topic.createdBy.id == session.user?.id?"":"Unsubscribe"}</a></td>
+                                <td colspan="2">
+                                    <g:if test="${subscribe.topic.createdBy.id != session.user?.id}">
+                                        <g:if test="${subscribe.userDetail.id == session.user?.id}">
+                                            <g:link controller="subscription" action="remove" params="['topic_id':subscribe.topic.id]">Unsubscribe</g:link>
+                                        </g:if>
+                                        <g:else>
+                                            <g:link controller="subscription" action="save" params="['topic_id':subscribe.topic.id]">Subscribe</g:link>
+                                        </g:else>
+                                    </g:if>
+                                </td>
                                 <td><a href="href">${subscribe.topic.subscription.size()}</a></td>
                                 <td><a href="href">${subscribe.topic.resource.size()}</a></td>
                             </tr>
 
                         </table>
                         <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
-                            <g:select  name="topic.visibility" from="${com.linksharing.Visibility}" value="${subscribe.topic.visibility}" required="required"></g:select>
+                            <g:select class="select"  name="topic.visibility" from="${com.linksharing.Visibility}" value="${subscribe.topic.visibility}" required="required"></g:select>
                         </g:if>
                         <g:field type="hidden" name="id" value="${subscribe.id}" />
-                        <g:select  name="seriousness" from="${com.linksharing.Seriousness}" value="${subscribe.seriousness}" required="required"></g:select>
+                        <g:select class="select" name="seriousness" from="${com.linksharing.Seriousness}" value="${subscribe.seriousness}" required="required"></g:select>
 
 
                         <div class="edit">

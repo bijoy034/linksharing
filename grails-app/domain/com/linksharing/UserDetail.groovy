@@ -37,14 +37,13 @@ class UserDetail {
         email(email: true, unique: true, blank: false)
         username(unique: true)
         password(password: true)
-        confirmPassword validator: { value, user, errors ->
+        confirmPassword bindable: true,password: true,nullable: true, validator: { value, user, errors ->
             if (!(value?.equals(user?.password))) {
                 errors.rejectValue("confirmPassword", "some.text", "Confirm password must be same as password")
                 return false
             }
             return true
         }
-        confirmPassword bindable: true
         admin()
         active()
         dateCreated(format: 'yyyy-MM-dd')

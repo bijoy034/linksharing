@@ -12,9 +12,9 @@ class UserDetailController {
 
     def dashboard(){
         UserDetail user = UserDetail.load(session.user?.id)
-        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(user)
+        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(user,[max:5])
 
-        [topic_subscription:subscriptionList,users:[UserDetail.get(session.user.id)],posts: subscriptionList*.topic.resource.flatten {ReadingItem.findAllByIsRead(null)}]
+        [topic_subscription:subscriptionList,users:[UserDetail.get(session.user?.id)],posts: subscriptionList*.topic.resource.flatten {ReadingItem.findAllByIsRead(null)}]
     }
 
     def index(Integer max) {

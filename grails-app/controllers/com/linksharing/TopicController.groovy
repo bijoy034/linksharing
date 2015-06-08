@@ -10,20 +10,32 @@ class TopicController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+    def index(Integer maxTopic ) {
         params.max = Math.min(max ?: 10, 100)
         respond Topic.list(params), model:[topicInstanceCount: Topic.count()]
     }
+    def list(Topic topicInstance ) {
+        UserDetail user = UserDetail.load(session.user?.id)
+        List<Topic> topicList = Topic.list()
+        List<Resource> post;
+        if(topicInstance){
+            post = Resource.findAllByTopic(Topic.load(topicInstance?.id))
+        }else{
+            post = topicList[0].resource as List
+        }
 
-    def show(Topic topicInstance) {
-        if (!topicInstance) {
-            redirect(url: "/")
-        }else {
-            def subscribe_topic = Subscription.findAllByTopic(topicInstance)
-            def resource = subscribe_topic[0].topic.resource
-        [topic_subscription: subscribe_topic, users: subscribe_topic[0].topic.subscription*.userDetail, posts: resource]
-         }
+        [topicList:topicList,posts: post]
     }
+    def show(Topic topicInstance) {
+        if (!topicInstance && session.user) {
+            redirect(controller: "topic", action: "list")
+        }else if(topicInstance && session.user){
+            List<Topic> topicList = [Topic.load(topicInstance.id)]
+            List<Resource> post = topicList[0].resource as List
+            [topicList:topicList,users: topicList[0].subscription*.userDetail,posts: post]
+        }
+    }
+
 
     def create() {
         respond new Topic(params)
@@ -32,20 +44,17 @@ class TopicController {
     @Transactional
     def save(Topic topicInstance) {
         withForm {
-            Subscription subscription = new Subscription(seriousness: Seriousness.Serious)
+            UserDetail user = UserDetail.load(session.user?.id)
+            Subscription subscription = new Subscription(seriousness: Seriousness.Serious,userDetail: user)
+            topicInstance.createdBy = user
             topicInstance.addToSubscription(subscription)
 
-            UserDetail user = UserDetail.load(session.user.id)
-            user.addToTopic(topicInstance)
-
-            user.addToSubscription(subscription)
-
-            if(user.hasErrors()){
+            if(topicInstance.hasErrors()){
                 flash.put("error-msg", user)
-            }else if (user.save(flush: true)) {
+            }else if (topicInstance.save(flush: true)) {
                 flash.message = "Topic successfully added!"
             }else {
-                flash.put("error-msg", user)
+                flash.put("error-msg", topicInstance)
             }
         }
         redirect(controller: "userDetail", action: 'dashboard')
