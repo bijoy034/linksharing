@@ -7,7 +7,7 @@ import grails.validation.ValidationException
 @Transactional
 class TopicService {
 
-    Topic saveTopic(Topic topicInstance,UserDetailDTO user) {
+    Topic saveTopic(Topic topicInstance,Map user) {
         UserDetail userDetail = UserDetail.load(user?.id)
         Subscription subscription = new Subscription(seriousness: Seriousness.VerySerious,userDetail: userDetail)
         topicInstance.createdBy = userDetail
@@ -30,13 +30,12 @@ class TopicService {
     }
 
     @Transactional(readOnly = true)
-    Object listTopic(UserDetail user){
-        UserDetail userDetail = UserDetail.get(user.id)
+    List<Topic> listTopic(Map user){
          Topic.createCriteria().listDistinct {
              or{
                  eq("visibility",Visibility.Public)
                  "subscription"{
-                     eq("userDetail",userDetail)
+                     eq("userDetail",UserDetail.get(user.id))
                  }
              }
          }

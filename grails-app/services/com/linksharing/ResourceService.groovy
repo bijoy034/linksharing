@@ -13,7 +13,7 @@ class ResourceService {
         Resource.get(resourceInstance.id)
     }
 
-    LinkShare shareLink(LinkShare linkShareInstance,UserDetail user){
+    LinkShare shareLink(LinkShare linkShareInstance,Map user){
         ReadingItem item = new ReadingItem(userDetail: user?.id,isRead: true)
         linkShareInstance.addToReadingItem(item)
         if (linkShareInstance.hasErrors()) {
@@ -26,7 +26,7 @@ class ResourceService {
         return null
     }
 
-    DocumentResource shareDocument(DocumentResourceCO documentsResourceInstanceCO,UserDetail user, String fileLocation){
+    DocumentResource shareDocument(DocumentResourceCO documentsResourceInstanceCO,Map user, String fileLocation){
         ReadingItem item = new ReadingItem(userDetail: user?.id,isRead: true)
         DocumentResource documentsResourceInstance = new DocumentResource(documentsResourceInstanceCO)
         documentsResourceInstance.addToReadingItem(item)

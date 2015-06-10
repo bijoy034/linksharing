@@ -163,7 +163,7 @@
     <div class="create-topic-body" style="display: none">
         <h3 class="widget-title"><span class="title-text ">Create Topic</span></h3>
 
-        <g:form useToken="true" class="clearfix"  controller="topic" action="save">
+        <g:form useToken="true" class="clearfix"  controller="subscription" action="saveTopic">
             <g:render template="/layouts/addTopic"></g:render>
 
             <p class="contact-button clearfix">
@@ -179,7 +179,7 @@
 
         <h3 class="widget-title"><span class="title-text">Share Document</span></h3>
 
-        <g:uploadForm useToken="true" class="clearfix" controller="documentResource" action="save">
+        <g:uploadForm useToken="true" class="clearfix" controller="resource" action="saveDoc">
             <g:render template="/layouts/shareDoc"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel">
@@ -194,7 +194,7 @@
 
         <h3 class="widget-title"><span class="title-text">Share Link</span></h3>
 
-        <g:form class="clearfix"  useToken="true" controller="linkShare" action="save">
+        <g:form class="clearfix"  useToken="true" controller="resource" action="saveLink">
            <g:render template="/layouts/shareLink"></g:render>
             <p class="contact-button clearfix">
                 <input type="reset" class="form-input form-input-button" value="Cancel"/>
@@ -221,7 +221,7 @@
     </div>
 </div>
 </g:if>
-<asset:javascript src="js/jquery-1.8.3.min.js"/>
+<g:javascript base="/linksharing/plugins/jquery-1.11.0.2/js/jquery" library="/jquery-1.11.0.min"/>
 <asset:javascript src="js/superfish.js"/>
 <asset:javascript src="js/bootstrap.js"/>
 <asset:javascript src="js/query.carouFredSel-6.0.4-packed.js"/>
@@ -237,3 +237,5 @@
 </body>
 
 </html>
+
+

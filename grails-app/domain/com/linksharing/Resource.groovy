@@ -8,6 +8,8 @@ class Resource {
     Date dateCreated
     Date lastUpdated
 
+    Resource(){}
+
     Resource(ResourceCO resourceCO){
         this.description = resourceCO.description
         this.createdBy = resourceCO.createdBy
