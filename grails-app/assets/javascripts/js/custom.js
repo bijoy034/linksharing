@@ -3,14 +3,14 @@ Comment Form
 ============================================================ */
 jQuery(document).ready(function(){
 
-	jQuery(".close").click(function(){
-		jQuery(".bg-image").children('div').hide();
+	jQuery('body').on("click",".close",function()	{
+		jQuery(".bg-image").children('div').html('<img src="/linksharing/assets/spinner.gif" class="spinner">');
 		jQuery(".bg-image").hide();
 		jQuery(".modal-overlay").hide();
 
 	});
 	jQuery(".modal-overlay").click(function(){
-		jQuery(".bg-image").children('div').hide();
+		jQuery(".bg-image").children('div').html('<img src="/linksharing/assets/spinner.gif" class="spinner">');
 		jQuery(".bg-image").hide();
 		jQuery(".modal-overlay").hide();
 
@@ -18,9 +18,6 @@ jQuery(document).ready(function(){
 	jQuery(".modal-form").click(function(){
 		jQuery(".modal-overlay").show();
 		jQuery(".bg-image").show();
-		jQuery(".bg-image").children('div').hide();
-		var navClass = jQuery(this).parent('a').attr('class');
-		jQuery("."+navClass+"-body").show();
 	});
 	jQuery(".edit-topic").click(function(){
 		var elem = jQuery(this).parent("div").parent("article");

@@ -14,9 +14,6 @@ class LoginController {
     def userService
     static allowedMethods = [login: 'POST', register: 'POST', logout: 'GET']
 
-    def index() {
-        //forward( action:"login")
-    }
 
     def login(String loginid,String password){
         withForm {
@@ -25,14 +22,17 @@ class LoginController {
                 if (user) {
                     session.user = user
                     flash.message = "Hello ${user.username}!"
+                    redirect(url: "/dashboard")
                 } else {
                     flash.error = "The email/username and password you entered don't match. "
+                    redirect(url: "/")
                 }
             }catch(Throwable e){
                 flash.error = e.getMessage()
+                redirect(url: "/")
             }
         }
-        redirect(url: "/")
+
     }
 
     def forgot(String email){
@@ -58,10 +58,12 @@ class LoginController {
             Map user = session.user
             flash.message = "Goodbye ${user.username}"
             session.invalidate()
+            redirect(url: '/')
         }catch(Throwable e){
             flash.error = e.getMessage()
+            redirect(url: '/dashboard')
         }
-        redirect(url: '/')
+
     }
 
     @Transactional
@@ -73,18 +75,18 @@ class LoginController {
                  if(user) {
                      flash.message = "Hallo ${user.username}"
                      session.user = user
-                     redirect(view: '/userDetail/dashboard')
+                     redirect(url: '/dashboard')
                  }else{
                      flash.message = "Try again"
-                     redirect(view: 'index')
+                     redirect(url:"/")
                  }
              }catch (ValidationException e) {
                  userDetailCOInstance.errors = e.errors
                  flash.put("error-msg", userDetailCOInstance)
-                 redirect(view: 'index')
+                 redirect(url:"/")
              }catch(Throwable e){
                  flash.message = e.getMessage()
-                 redirect(view: 'index')
+                 redirect(url:"/")
              }
          }
 

@@ -4,7 +4,7 @@ class ApplicationFilters {
 
     def filters = {
 
-        beforeLogin(controller: 'login', action: '*', invert: true) {
+        beforeLogin(controller: '(userDetail|subscription|resource)') {
             before = {
                 if (!session.user) {
                     redirect(url: "/")
@@ -13,13 +13,14 @@ class ApplicationFilters {
             }
 
         }
-        afterLogin(controller: 'login', action: 'index') {
-            before = {
-                if (session.user) {
-                    redirect(controller: 'userDetail', action: 'dashboard')
-                    return false
-                }
-            }
-        }
+//
+//        afterLogin(controller: '(userDetail|subscription|resource)',invert:true) {
+//            before = {
+//                if (session.user) {
+//                    redirect(url: '/dashboard')
+//                    return false
+//                }
+//            }
+//        }
     }
 }

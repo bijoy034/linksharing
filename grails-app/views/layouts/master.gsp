@@ -66,6 +66,7 @@
                         <a href="${createLink(uri: '/')}"><asset:image src="placeholders/logo.png" alt=""
                                                                        style="height: 58px"/></a>
                     </div><!--logo-image-->
+
                    <g:if test="${session.user}">
                     <div class="top-banner">
 
@@ -76,22 +77,28 @@
                                     <a href="#" ><asset:image src="placeholders/comment.png" alt=""/></a><span></span>
                                     <ul>
                                         <li>
-                                            <a href="#" class="create-topic"  title="Add topic" >
+                       <g:remoteLink controller="ajax" action="addTopic" update="actionBody" title="Add topic" >
                                                 <label class="modal-form" style="font-size: 20px;">AddTopic</label>
-                                            </a>
+                       </g:remoteLink>
                                         </li>
                                         <li><g:link controller="topic" action="list">List&nbsp;Topics</g:link></li>
                                     </ul>
                                 </li>
-                                <li><a href="#" title="Send invitation" class="invite"><asset:image src="placeholders/inbox.png"
-                                                                            class="modal-form" style=" height:50px;"
-                                                                            alt=""/></a><span></span></li>
-                                <li><a href="#" title="Share link" class="share-link"><asset:image src="placeholders/link.png"
-                                                                                class="modal-form"
-                                                                                alt=""/></a><span></span></li>
-                                <li><a href="#" title="Add file" class="share-document"><asset:image src="placeholders/file.png"
-                                                                                    class="modal-form"
-                                                                                    alt=""/></a><span></span></li>
+                                <li>
+                                    <g:remoteLink controller="ajax" action="invite" update="actionBody" title="Send Invitation" >
+                                        <asset:image src="placeholders/inbox.png" class="modal-form" style=" height:50px;" alt=""/>
+                                    </g:remoteLink><span></span>
+                                </li>
+                                <li>
+                                    <g:remoteLink controller="ajax" action="shareLink" update="actionBody" title="Share Link" >
+                                        <asset:image src="placeholders/link.png" class="modal-form" alt=""/>
+                                    </g:remoteLink><span></span>
+                                </li>
+                                <li>
+                                    <g:remoteLink controller="ajax" action="shareDoc" update="actionBody" title="Add File" >
+                                        <asset:image src="placeholders/file.png" class="modal-form" alt=""/>
+                                    </g:remoteLink><span></span>
+                                </li>
                                 <li>
                                     <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt=""/></a><span></span>
                                     <ul>
@@ -116,7 +123,6 @@
 
             </header><!--page-header-->
             <div id="main-content">
-    <g:if test="${session.user}">
             <g:if test="${flash.message}">
                 <label class="message" role="status">${flash.message}</label>
             </g:if>
@@ -131,7 +137,6 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-    </g:if>
         <g:layoutBody/>
             </div>
         <!--bottom-sidebar-->
@@ -158,67 +163,12 @@
 
 
 <div class="bg-image">
-    <a href="#" class="close"></a>
 
-    <div class="create-topic-body" style="display: none">
-        <h3 class="widget-title"><span class="title-text ">Create Topic</span></h3>
-
-        <g:form useToken="true" class="clearfix"  controller="subscription" action="saveTopic">
-            <g:render template="/layouts/addTopic"></g:render>
-
-            <p class="contact-button clearfix">
-                <input type="reset" class="form-input form-input-button" value="Cancel">
-                <g:submitButton class="form-input form-input-button" value="Save" name="topicSave"/>
-            </p>
-
-            <div class="clear"></div>
-        </g:form>
+    <div id="actionBody">
+        <asset:image src="spinner.gif" class="spinner"/>
     </div>
 
-    <div class="share-document-body" style="display: none">
 
-        <h3 class="widget-title"><span class="title-text">Share Document</span></h3>
-
-        <g:uploadForm useToken="true" class="clearfix" controller="resource" action="saveDoc">
-            <g:render template="/layouts/shareDoc"></g:render>
-            <p class="contact-button clearfix">
-                <input type="reset" class="form-input form-input-button" value="Cancel">
-                <g:submitButton name="shareDoc" class="form-input form-input-button" value="Share"/>
-            </p>
-
-            <div class="clear"></div>
-        </g:uploadForm>
-    </div>
-
-    <div class="share-link-body" style="display: none">
-
-        <h3 class="widget-title"><span class="title-text">Share Link</span></h3>
-
-        <g:form class="clearfix"  useToken="true" controller="resource" action="saveLink">
-           <g:render template="/layouts/shareLink"></g:render>
-            <p class="contact-button clearfix">
-                <input type="reset" class="form-input form-input-button" value="Cancel"/>
-                <g:submitButton name="shareLink" type="submit" class="form-input form-input-button" value="Share"/>
-            </p>
-
-            <div class="clear"></div>
-        </g:form>
-    </div>
-
-    <div class="invite-body" style="display: none">
-
-        <h3 class="widget-title"><span class="title-text ">Send Invitation</span></h3>
-
-        <g:form class="clearfix" useToken="true" action="#" method="post">
-            <g:render template="/layouts/invite"></g:render>
-            <p class="contact-button clearfix">
-                <input type="reset" class="form-input form-input-button" value="Cancel">
-                <input type="submit" class="form-input form-input-button" value="Invite">
-            </p>
-
-            <div class="clear"></div>
-        </g:form>
-    </div>
 </div>
 </g:if>
 <g:javascript base="/linksharing/plugins/jquery-1.11.0.2/js/jquery" library="/jquery-1.11.0.min"/>

@@ -44,7 +44,7 @@
 											<a href="${link.url}" target="_blank">View full site</a>
 										</g:if>
 										<g:if test="${doc}">
-											<g:link controller="documentResource" action="downloadDoc" id="${post.id}" target="_blank">Download</g:link>
+											<g:link controller="topic" action="downloadDoc" id="${post.id}" target="_blank">Download</g:link>
 										</g:if>
 										<g:if test="${post.createdBy.id == session.user?.id}">
 											<a href="#" >Edit</a>

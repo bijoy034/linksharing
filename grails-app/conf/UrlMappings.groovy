@@ -7,7 +7,11 @@ class UrlMappings {
             }
         }
 
-        "/"(controller: "login")
+        "/"(view: "index")
         "500"(view:'/error')
+        "/subscription"(controller: "subscription",action: "list")
+        "/topic"(controller: "topic",action: "list")
+        "/userDetail"(controller: "userDetail",action: "dashboard")
+        "/dashboard"(controller: "userDetail",action: "dashboard")
 	}
 }

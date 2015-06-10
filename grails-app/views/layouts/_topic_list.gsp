@@ -5,7 +5,8 @@
     <ul>
 <g:each in="${topicList}" status="i" var="topic">
         <li>
-            <g:form controller="subscription" action="update" class="edit-subscription">
+    <g:formRemote name="form${i}" url="[controller: 'subscription', action: 'update']" update="${i}${i}"  class="edit-subscription">
+
                     <article class="entry-item clearfix">
                         <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${topic.createdBy.photo?:'user.png'}")}" alt="" /></a> </div>
                         <div style="width: 75%;float: left;">
@@ -63,8 +64,9 @@
                             <a href="#"><asset:image src="placeholders/trash.png" alt="" /></a>
                         </g:if>
                         </div>
+                        <div id="${i}${i}"></div>
                     </article>
-            </g:form>
+            </g:formRemote>
         </li>
 </g:each>
     </ul>

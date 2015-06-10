@@ -1,4 +1,8 @@
 <%@ page import="com.linksharing.DocumentResource;com.linksharing.Topic;com.linksharing.UserDetail" %>
+<a href="#" class="close"></a>
+<h3 class="widget-title"><span class="title-text">Share Document</span></h3>
+
+<g:uploadForm useToken="true" class="clearfix" controller="resource" action="saveDoc">
 <p class="input-block ${hasErrors(bean: documentResourceInstance, field: 'filePath','error')}">
     <label class="required" for="filePath">
         <g:message code="linkShare.filePath.label" default="File" />
@@ -19,6 +23,13 @@
         <g:message code="linkShare.topic.label" default="Topic" />
         <span>*</span>
     </label>
-    <g:select id="topic"  name="topic.id" from="${Topic.findAllByCreatedBy(UserDetail.load(session.user?.id),[sort:'name'])}" optionKey="id" optionValue="name" required="required"  class="form-input"></g:select>
+    <g:select id="topic"  name="topic.id" from="${topicList}" optionKey="id" optionValue="name" required="required"  class="form-input"></g:select>
 </p>
 <g:field type="hidden" id="createdBy" name="createdBy.id"  value="${session.user?.id}"/>
+    <p class="contact-button clearfix">
+        <input type="reset" class="form-input form-input-button" value="Cancel">
+        <g:submitButton name="shareDoc" class="form-input form-input-button" value="Share"/>
+    </p>
+
+    <div class="clear"></div>
+</g:uploadForm>

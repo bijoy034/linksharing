@@ -6,6 +6,8 @@ import grails.transaction.Transactional
 class UserDetailController {
     def userService
 
+    def index(){}
+
     def dashboard(){
         try {
             userService.dashboard(session.user as Map)

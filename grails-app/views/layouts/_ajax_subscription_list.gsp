@@ -4,15 +4,17 @@
     <ul>
 <g:each in="${topic_subscription}" status="i" var="subscribe">
         <li>
-            -<g:formRemote name="form${i}" url="[controller: 'subscription', action: 'update']" update="${i}${i}"  class="edit-subscription">
-
+            <g:form controller="subscription" action="update" class="edit-subscription">
                     <article class="entry-item clearfix">
                         <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.photo?:'user.png'}")}" alt="" /></a> </div>
                         <div style="width: 75%;float: left;">
                             <table >
                             <tr class="entry-content show-text">
                                 <th colspan="4" style="text-align: left;  padding-left: 12px;">
-                                    <g:link controller="subscription" action="list" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link>
+                                    <g:remoteLink controller="ajax" action="loadTopicPosts" update="topicPost" id="${subscribe.topic.id}" >
+                                        ${subscribe.topic.name}
+                                    </g:remoteLink>
+                                   %{-- <g:link controller="subscription" action="list" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link>--}%
                                 </th>
                             </tr>
                             <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
@@ -58,9 +60,8 @@
                             <a href="#"><asset:image src="placeholders/trash.png" alt="" /></a>
                         </g:if>
                         </div>
-                        <div id="${i}${i}"></div>
                     </article>
-            </g:formRemote>
+            </g:form>
         </li>
 </g:each>
     </ul>

@@ -20,10 +20,10 @@ class SubscriptionController {
             }catch (ValidationException e) {
                 topicInstance.errors = e.errors
                 flash.put("error-msg", topicInstance)
-                redirect(controller: "userDetail", action: 'dashboard')
+                redirect(url: '/dashboard')
             }catch(Throwable e){
                 flash.error = e.getMessage()
-                redirect(controller: "userDetail", action: 'dashboard')
+                redirect(url: '/dashboard')
             }
         }
 
@@ -31,7 +31,7 @@ class SubscriptionController {
 
     def list(Topic topicInstance ) {
         try {
-            List<Subscription> subscriptionList = subscriptionService.listSubscription(session.user as UserDetail)
+            List<Subscription> subscriptionList = subscriptionService.listSubscription(session.user as Map)
             List<Resource> post;
             if (subscriptionList.size() > 0) {
                 if (topicInstance) {
@@ -41,11 +41,11 @@ class SubscriptionController {
                 }
                 [topic_subscription: subscriptionList, posts: post]
             } else {
-                redirect(url: "/")
+                redirect(url: '/dashboard')
             }
         }catch(Throwable e){
             flash.error = e
-            redirect(url: "/")
+            redirect(url: '/dashboard')
         }
     }
 
@@ -59,10 +59,10 @@ class SubscriptionController {
         }catch (ValidationException e) {
             subscriptionInstance.errors = e.errors
             flash.put("error-msg", subscriptionInstance)
-            redirect(controller: "userDetail", action: 'dashboard')
+            redirect(url: '/dashboard')
         }catch(Throwable e){
             flash.message = e.getMessage()
-            redirect(controller: "userDetail", action: 'dashboard')
+            redirect(url: '/dashboard')
         }
     }
     @Transactional
@@ -75,10 +75,10 @@ class SubscriptionController {
         }catch (ValidationException e) {
             subscriptionInstance.errors = e.errors
             flash.put("error-msg", subscriptionInstance)
-            redirect(controller: "userDetail", action: 'dashboard')
+            redirect(url: '/dashboard')
         }catch(Throwable e){
             flash.message = e.getMessage()
-            redirect(controller: "userDetail", action: 'dashboard')
+            redirect(url: '/dashboard')
         }
     }
 
@@ -86,15 +86,18 @@ class SubscriptionController {
     def update(Subscription subscriptionInstance) {
         try {
             subscriptionInstance = subscriptionService.updateSubscribe(subscriptionInstance)
-            flash.message = "successfully Updated!"
-            redirect(controller: "topic", action: 'show',id: subscriptionInstance.topic.id)
+            render "successfully Updated!"
+            //render flash.message = "successfully Updated!"
+            //redirect(controller: "topic", action: 'show',id: subscriptionInstance.topic.id)
         }catch (ValidationException e) {
-            subscriptionInstance.errors = e.errors
-            flash.put("error-msg", subscriptionInstance)
-            redirect(controller: "userDetail", action: 'dashboard')
+            render e.errors.properties
+            //subscriptionInstance.errors = e.errors.properties
+            //render flash.put("error-msg", subscriptionInstance)
+            //redirect(url: '/dashboard')
         }catch(Throwable e){
-            flash.message = e.getMessage()
-            redirect(controller: "userDetail", action: 'dashboard')
+            render e.getMessage()
+            //render flash.message = e.getMessage()
+           // redirect(url: '/dashboard')
         }
     }
 

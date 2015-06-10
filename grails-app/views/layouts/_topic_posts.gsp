@@ -31,7 +31,7 @@
                             <a href="#"><asset:image src="placeholders/Linkedin.png" alt="" /></a>
                             <a href="#"><asset:image src="placeholders/googleplus.png" alt="" /></a>
                             <div class="modify">
-                                <g:link controller="resource" action="show" id="${post.id}">View post</g:link>
+                                <g:link controller="topic" action="resource" id="${post.id}">View post</g:link>
                                 <g:if test="${!post.readingItem*.userDetail.id.contains(session.user?.id)}">
                                     <a href="#">Mark as read</a>
                                 </g:if>
@@ -43,7 +43,7 @@
                                     <a href="${link.url}" target="_blank">View full site</a>
                                 </g:if>
                                 <g:elseif test="${doc}">
-                                    <g:link controller="resource" action="downloadDoc" id="${post.id}" target="_blank">Download</g:link>
+                                    <g:link controller="topic" action="downloadDoc" id="${post.id}" target="_blank">Download</g:link>
                                 </g:elseif>
                             </div>
                         </span>
