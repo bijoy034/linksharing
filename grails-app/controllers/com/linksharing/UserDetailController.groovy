@@ -1,6 +1,6 @@
 package com.linksharing
 
-
+import com.linksharing.dto.UserDetailDTO
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -13,9 +13,10 @@ class UserDetailController {
 
     def dashboard(){
         try {
-            userService.dashboard(session.user as UserDetail)
+            userService.dashboard(session.user as Map)
+
         }catch (Throwable e){
-            flash.error = e.getMessage()
+           flash.error = e.getMessage()
             session.invalidate()
             redirect(url: '/')
         }

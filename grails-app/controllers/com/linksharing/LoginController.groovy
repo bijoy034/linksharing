@@ -1,6 +1,7 @@
 package com.linksharing
 
 import com.linksharing.co.UserDetailCO
+import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.Validateable
 import grails.validation.ValidationException
@@ -20,10 +21,10 @@ class LoginController {
     def login(String loginid,String password){
         withForm {
             try {
-                UserDetail user = userService.login(loginid, password)
-                if (userService.login(loginid, password)) {
+                Map user = userService.login(loginid, password)
+                if (user) {
                     session.user = user
-                    flash.message = "Hello ${user.firstName + " " + user.lastName}!"
+                    flash.message = "Hello ${user.username}!"
                 } else {
                     flash.error = "The email/username and password you entered don't match. "
                 }
@@ -31,12 +32,30 @@ class LoginController {
                 flash.error = e.getMessage()
             }
         }
+        redirect(url: "/")
+    }
+
+    def forgot(String email){
+        withForm {
+            try {
+                UserDetail user = userService.isValidEmail(email)
+                if (user) {
+                    userService.sendPasswordToMail(user)
+                    flash.message = "Your password has been sent to your mail!"
+                } else {
+                    flash.error = "The email id is not registered. "
+                }
+            }catch(Throwable e){
+                flash.error = e.getMessage()
+            }
+        }
+        redirect(url: "/")
     }
 
 
     def logout = {
         try {
-            UserDetail user = session.user
+            Map user = session.user
             flash.message = "Goodbye ${user.username}"
             session.invalidate()
         }catch(Throwable e){
@@ -50,22 +69,22 @@ class LoginController {
          withForm {
              try {
                  String path = grailsApplication.mainContext.servletContext.getRealPath("images/profile")
-                 UserDetail user = userService.register(userDetailCOInstance,path)
+                 Map user = userService.register(userDetailCOInstance,path)
                  if(user) {
                      flash.message = "Hallo ${user.username}"
                      session.user = user
-                     render(view: '/userDetail/dashboard')
+                     redirect(view: '/userDetail/dashboard')
                  }else{
                      flash.message = "Try again"
-                     render(view: 'index')
+                     redirect(view: 'index')
                  }
              }catch (ValidationException e) {
                  userDetailCOInstance.errors = e.errors
                  flash.put("error-msg", userDetailCOInstance)
-                 render(view: 'index')
+                 redirect(view: 'index')
              }catch(Throwable e){
                  flash.message = e.getMessage()
-                 render(view: 'index')
+                 redirect(view: 'index')
              }
          }
 

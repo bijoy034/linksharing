@@ -49,7 +49,7 @@ class SubscriptionController {
     def save(Long topic_id) {
         Subscription subscriptionInstance
         try {
-            subscriptionInstance = subscriptionService.subscribeTopic(topic_id,session.user as UserDetail)
+            subscriptionInstance = subscriptionService.subscribeTopic(topic_id,session.user as Map)
             flash.message = "successfully topic subscribed!"
             redirect(controller: "topic", action: 'show',id: topic_id)
         }catch (ValidationException e) {
@@ -86,7 +86,7 @@ class SubscriptionController {
     def update(Subscription subscriptionInstance) {
         try {
             subscriptionInstance = subscriptionService.updateSubscribe(subscriptionInstance)
-            flash.message = "successfully topic subscribed!"
+            flash.message = "successfully Updated!"
             redirect(controller: "topic", action: 'show',id: subscriptionInstance.topic.id)
         }catch (ValidationException e) {
             subscriptionInstance.errors = e.errors

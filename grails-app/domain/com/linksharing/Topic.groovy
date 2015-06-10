@@ -2,14 +2,14 @@ package com.linksharing
 
 class Topic {
     String name
-   Visibility visibility
+    Visibility visibility
     Date dateCreated
     Date lastUpdated
     static belongsTo = [createdBy:UserDetail]
     static hasMany = [subscription:Subscription,resource:Resource]
     static mapping = {
-        sort lastUpdated: 'desc'
-        subscription fetch: 'join'
+        /*sort lastUpdated: 'desc'
+        subscription fetch: 'join'*/
     }
     static constraints = {
 

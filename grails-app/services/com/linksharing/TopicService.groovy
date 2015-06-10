@@ -1,15 +1,16 @@
 package com.linksharing
 
+import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
 
 @Transactional
 class TopicService {
 
-    Topic saveTopic(Topic topicInstance,UserDetail user) {
-        user = UserDetail.load(user?.id)
-        Subscription subscription = new Subscription(seriousness: Seriousness.VerySerious,userDetail: user)
-        topicInstance.createdBy = user
+    Topic saveTopic(Topic topicInstance,UserDetailDTO user) {
+        UserDetail userDetail = UserDetail.load(user?.id)
+        Subscription subscription = new Subscription(seriousness: Seriousness.VerySerious,userDetail: userDetail)
+        topicInstance.createdBy = userDetail
         topicInstance.addToSubscription(subscription)
 
         if(topicInstance.hasErrors()){
@@ -29,8 +30,16 @@ class TopicService {
     }
 
     @Transactional(readOnly = true)
-    List<Topic> listTopic(){
-         Topic.list()
+    Object listTopic(UserDetail user){
+        UserDetail userDetail = UserDetail.get(user.id)
+         Topic.createCriteria().listDistinct {
+             or{
+                 eq("visibility",Visibility.Public)
+                 "subscription"{
+                     eq("userDetail",userDetail)
+                 }
+             }
+         }
     }
 
     @Transactional(readOnly = true)

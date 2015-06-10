@@ -1,5 +1,6 @@
 package com.linksharing
 
+import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
 
@@ -7,12 +8,12 @@ import grails.validation.ValidationException
 class SubscriptionService {
 
     @Transactional(readOnly = true)
-    List<Subscription> listSubscription(UserDetail user,Map criteria = [:]) {
-        user = UserDetail.load(user?.id)
-        Subscription.findAllByUserDetail(user,criteria)
+    List<Subscription> listSubscription(Map user,Map criteria = [:]) {
+        UserDetail userDetail = UserDetail.load(user?.id)
+        Subscription.findAllByUserDetail(userDetail,criteria)
     }
 
-    Subscription subscribeTopic(Long topic_id,UserDetail user) {
+    Subscription subscribeTopic(Long topic_id,Map user) {
         user = UserDetail.load(user?.id)
         Subscription subscriptionInstance = new Subscription(seriousness: Seriousness.VerySerious,topic: Topic.load(topic_id), userDetail: user)
         if(subscriptionInstance.hasErrors()){

@@ -1,5 +1,7 @@
 package com.linksharing
 
+import com.linksharing.dto.TopicDTO
+import com.linksharing.dto.UserDetailDTO
 import grails.validation.ValidationException
 import org.springframework.validation.Errors
 
@@ -16,14 +18,16 @@ class TopicController {
         params.max = Math.min(max ?: 10, 100)
         respond Topic.list(params), model:[topicInstanceCount: Topic.count()]
     }
+    def demo(){}
     def list(Topic topicInstance ) {
         try {
-            List<Topic> topicList = topicService.listTopic()
+            List<Topic> topicList = topicService.listTopic(session.user as UserDetail)
             List<Resource> post;
             if (topicList.size() > 0) {
                 if (topicInstance) {
                     post = topicService.listAllTopicPosts(topicInstance)
                 } else {
+
                     post = topicList[0].resource as List
                 }
                 [topicList: topicList, posts: post]
@@ -31,10 +35,9 @@ class TopicController {
                 redirect(url: "/")
             }
         }catch(Throwable e){
-            flash.error = e
+            flash.error = e.getMessage()
             redirect(url: "/")
         }
-
 
     }
     def show(Topic topicInstance) {
@@ -59,7 +62,7 @@ class TopicController {
     def save(Topic topicInstance) {
         withForm {
             try {
-                Topic topic = topicService.saveTopic(topicInstance, session.user as UserDetail)
+                Topic topic = topicService.saveTopic(topicInstance, session.user as UserDetailDTO)
                 flash.message = "Topic successfully added!"
                 redirect(controller: "topic", action: 'show',id: topic.id)
             }catch (ValidationException e) {

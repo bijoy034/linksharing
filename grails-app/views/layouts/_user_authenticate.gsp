@@ -18,6 +18,7 @@
     <ul class="tabs-3 clearfix">
         <li class="active"><a href="#tab-3-1">Login</a></li>
         <li><a href="#tab-3-2">Registration</a></li>
+        <li><a href="#tab-3-3">Password !!!</a></li>
     </ul><!--tabs-3-->
 </div>
 
@@ -40,6 +41,15 @@
                 <g:submitButton name="submit-contact" value="Register"/>
             </p>
 
+            <div class="clear"></div>
+        </g:uploadForm>
+    </div><!--tab-content-3-->
+    <div class="tab-content-3" id="tab-3-3">
+        <g:uploadForm useToken="true" class="clearfix reg-form" controller="login" action="forgot" name="contact-form">
+            <g:render template="forgot_password_form"/>
+            <p class="contact-button clearfix">
+                <g:submitButton name="submit-contact" value="Get Password In Mail"/>
+            </p>
             <div class="clear"></div>
         </g:uploadForm>
     </div><!--tab-content-3-->
