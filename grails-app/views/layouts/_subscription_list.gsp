@@ -4,7 +4,7 @@
     <ul>
 <g:each in="${topic_subscription}" status="i" var="subscribe">
         <li>
-            -<g:formRemote name="form${i}" url="[controller: 'subscription', action: 'update']" update="${i}${i}"  class="edit-subscription">
+            -<g:form name="form${i}" controller="subscription" action="update"  class="edit-subscription">
 
                     <article class="entry-item clearfix">
                         <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${subscribe.topic.createdBy.photo?:'user.png'}")}" alt="" /></a> </div>
@@ -60,7 +60,7 @@
                         </div>
                         <div id="${i}${i}"></div>
                     </article>
-            </g:formRemote>
+            </g:form>
         </li>
 </g:each>
     </ul>

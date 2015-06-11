@@ -9,6 +9,7 @@ class UserDetailController {
     def index(){}
 
     def dashboard(){
+        println "Dashboard reached"
         try {
             userService.dashboard(session.user as Map)
 
@@ -17,6 +18,10 @@ class UserDetailController {
             session.invalidate()
             redirect(url: '/')
         }
+    }
+    def inbox(){
+       // [posts:userService.inbox(session.user as Map)]
+        render userService.inbox(session.user as Map)
     }
 
 

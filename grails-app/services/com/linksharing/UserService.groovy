@@ -5,6 +5,7 @@ import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
 import org.hibernate.criterion.CriteriaSpecification
+import org.hibernate.sql.JoinType
 
 @Transactional
 class UserService {
@@ -14,14 +15,13 @@ class UserService {
     def mailingService
 
     Map register(UserDetailCO userDetailCOInstance,String fileLocation) {
+        println "<====================================Register=========================================================>"
         UserDetail userDetail = new UserDetail(userDetailCOInstance)
             if (userDetailCOInstance.hasErrors()) {
                 throw new ValidationException("User Detail is not valid", userDetailCOInstance.errors)
-            }else if (userDetail.validate()) {
-                if(fileService.upload(userDetailCOInstance.photo,fileLocation)) {
-                    userDetail.save(flush: true)
-                    return [id:userDetail.id,photo:userDetail.photo,username:userDetail.username]
-                }
+            }else if (userDetail.save()) {
+                (fileService.upload(userDetailCOInstance.photo,fileLocation))
+                return [id:userDetail.id,photo:userDetail.photo,username:userDetail.username]
             } else {
                 throw new ValidationException("User Detail is not valid", userDetail.errors)
             }
@@ -31,6 +31,7 @@ class UserService {
 
     @Transactional(readOnly = true)
     Map login(String loginid,String password){
+        println "<====================================Login=========================================================>"
         //UserDetail.findByPasswordAndUsername(password, loginid) ?: UserDetail.findByPasswordAndEmail(password, loginid)
         Map data = UserDetail.createCriteria().get {
                             resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
@@ -50,14 +51,26 @@ class UserService {
     }
     @Transactional(readOnly = true)
     UserDetail isValidEmail(String email){
+        println "<====================================IsValidEmail=========================================================>"
         UserDetail userDetail = UserDetail.findByEmail(email)
     }
 
     @Transactional(readOnly = true)
     Map<String,Object> dashboard(Map user){
+        println "<====================================Dashboard=========================================================>"
         List<Subscription> subscriptionList = subscriptionService.listSubscription(user,[max:5])
 
-        [topic_subscription:subscriptionList,users:[UserDetail.get(user?.id)],posts: subscriptionList*.topic.resource.flatten {ReadingItem.findAllByIsRead(null)}]
+        [topic_subscription:subscriptionList,users:[UserDetail.get(user?.id)],posts: inbox(user)]
+    }
+
+    Object inbox(Map user){
+        println "<====================================Inbox=========================================================>"
+
+        List<Resource> resourceList =  Resource.executeQuery('''from Resource r join  r.topic t join t.subscription s join s.userDetail u
+                                   where r.id not in
+                                     (select r1.id from Resource r1 join r1.readingItem rd join r1.topic t1 join t1.subscription s1
+                                         where rd.userDetail.id = :id
+                                         )AND u.id = :id group by r.id''',[id:user.id.toLong()])
     }
 
     def sendPasswordToMail(UserDetail user){

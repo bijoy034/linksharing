@@ -11,16 +11,20 @@ class ApplicationFilters {
                     return false
                 }
             }
+            after = {
+                println "<====================================Rendering view=========================================================>"
+            }
 
         }
-//
-//        afterLogin(controller: '(userDetail|subscription|resource)',invert:true) {
-//            before = {
-//                if (session.user) {
-//                    redirect(url: '/dashboard')
-//                    return false
-//                }
-//            }
-//        }
+
+        afterLogin(uri: '/') {
+            before = {
+                if (session.user) {
+                    println "Filter start"
+                    redirect(url:"/dashboard")
+                    //return false
+                }
+            }
+        }
     }
 }

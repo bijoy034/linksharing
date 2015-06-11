@@ -30,7 +30,7 @@
         <div class="widget kopa-article-list-widget">
             <h3 class="widget-title"><span class="title-line"></span><span class="title-text">Inbox</span></h3>
 
-            <g:render template="/layouts/topic_posts"/>
+            <g:render template="/layouts/inbox"/>
         </div><!--kopa-article-list-widget-->
 
     </div><!--main-col-->

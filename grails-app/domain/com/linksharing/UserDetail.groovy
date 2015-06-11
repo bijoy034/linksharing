@@ -41,7 +41,6 @@ class UserDetail {
         firstName()
         lastName()
         email(email: true, unique: true, blank: false)
-        email(unique: "username")
         username(unique: true)
         password(password: true)
         photo(nullable: true)

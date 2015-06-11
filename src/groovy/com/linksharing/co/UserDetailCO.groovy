@@ -24,6 +24,7 @@ class UserDetailCO {
             }
             return true
         }
+        email(unique: "username")
         importFrom(UserDetail)
     }
 

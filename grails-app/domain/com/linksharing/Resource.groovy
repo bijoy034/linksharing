@@ -27,8 +27,6 @@ class Resource {
         tablePerHierarchy false
         description type: 'text'
         sort dateCreated: 'desc'
-        readingItem lazy:false
-        resourceRating fetch: 'join'
     }
     static constraints = {
       //  title(unique: 'topic') // topic not working

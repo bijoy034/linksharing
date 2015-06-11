@@ -1,11 +1,11 @@
 <%@ page import="com.linksharing.Seriousness" %>
 
 <div class="tab-container-1">
-    <g:if test="${topicList.size() > 0}">
+    <g:if test="${topicList?.size() > 0}">
     <ul>
 <g:each in="${topicList}" status="i" var="topic">
         <li>
-    <g:formRemote name="form${i}" url="[controller: 'subscription', action: 'update']" update="${i}${i}"  class="edit-subscription">
+    <g:form name="form${i}" url="[controller: 'subscription', action: 'update']"   class="edit-subscription">
 
                     <article class="entry-item clearfix">
                         <div class="entry-thumb"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${topic.createdBy.photo?:'user.png'}")}" alt="" /></a> </div>
@@ -66,7 +66,7 @@
                         </div>
                         <div id="${i}${i}"></div>
                     </article>
-            </g:formRemote>
+            </g:form>
         </li>
 </g:each>
     </ul>

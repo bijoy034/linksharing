@@ -10,7 +10,6 @@ class SubscriptionController {
     def topicService
     def subscriptionService
 
-    @Transactional
     def saveTopic(Topic topicInstance) {
         withForm {
             try {
@@ -49,7 +48,6 @@ class SubscriptionController {
         }
     }
 
-    @Transactional
     def save(Long topic_id) {
         Subscription subscriptionInstance
         try {
@@ -65,13 +63,47 @@ class SubscriptionController {
             redirect(url: '/dashboard')
         }
     }
-    @Transactional
     def remove(Long topic_id) {
         Subscription subscriptionInstance
         try{
             subscriptionInstance = subscriptionService.unSubscribe(topic_id,session.user as Map)
             flash.message = "Topic Unsubscribed!"
             redirect(controller: "topic", action: 'show', id:topic_id)
+        }catch(Throwable e){
+            flash.message = e.getMessage()
+            redirect(url: '/dashboard')
+        }
+    }
+
+    def read(Long id) {
+        ReadingItem readingItem
+//        try {
+            /*readingItem = */subscriptionService.readResource(Resource.get(id),UserDetail.get(session.user.id as Long))
+            flash.message = "Item read!"
+//        }catch (ValidationException e) {
+//            readingItem.errors = e.errors
+//            flash.put("error-msg", readingItem)
+//        }catch(Throwable e){
+//            flash.message = e.getMessage()
+//        }
+       redirect(url: '/dashboard')
+    }
+
+    def unRead(ReadingItem readingItem) {
+        try{
+            subscriptionService.unReadReasource(readingItem)
+            flash.message = "Item unread!"
+        }catch(Throwable e){
+            flash.message = e.getMessage()
+            redirect(url: '/dashboard')
+        }
+    }
+
+    def update(Subscription subscriptionInstance) {
+        try {
+            subscriptionInstance = subscriptionService.updateSubscribe(subscriptionInstance)
+            flash.message = "successfully Updated!"
+            redirect(controller: "topic", action: 'show',id: subscriptionInstance.topic.id)
         }catch (ValidationException e) {
             subscriptionInstance.errors = e.errors
             flash.put("error-msg", subscriptionInstance)
@@ -81,24 +113,16 @@ class SubscriptionController {
             redirect(url: '/dashboard')
         }
     }
-
-     @Transactional
+    /* @Transactional
     def update(Subscription subscriptionInstance) {
         try {
             subscriptionInstance = subscriptionService.updateSubscribe(subscriptionInstance)
             render "successfully Updated!"
-            //render flash.message = "successfully Updated!"
-            //redirect(controller: "topic", action: 'show',id: subscriptionInstance.topic.id)
         }catch (ValidationException e) {
             render e.errors.properties
-            //subscriptionInstance.errors = e.errors.properties
-            //render flash.put("error-msg", subscriptionInstance)
-            //redirect(url: '/dashboard')
         }catch(Throwable e){
             render e.getMessage()
-            //render flash.message = e.getMessage()
-           // redirect(url: '/dashboard')
         }
-    }
+    }*/
 
 }

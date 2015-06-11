@@ -1,6 +1,5 @@
 package com.linksharing
 
-import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
 
@@ -23,7 +22,7 @@ class SubscriptionService {
         }else {
             throw new ValidationException("Subscribe Detail is not valid", subscriptionInstance.errors)
         }
-        return null
+        subscriptionInstance
     }
 
     Subscription updateSubscribe(Subscription subscriptionInstance){
@@ -34,10 +33,35 @@ class SubscriptionService {
         }else {
             throw new ValidationException("Subscribe Detail is not valid", subscriptionInstance.errors)
         }
-        return null
+        subscriptionInstance
     }
 
     Subscription unSubscribe(Long topic_id,Map user){
-        Subscription.findByTopicAndUserDetail(Topic.load(topic_id), UserDetail.load(user?.id)).delete(flush: true)
+        Subscription subscription = Subscription.findByTopicAndUserDetail(Topic.load(topic_id), UserDetail.load(user?.id))
+        if(subscription) {
+            subscription.delete(flush: true)
+        }
+        subscription
+    }
+
+    ReadingItem unReadResource(ReadingItem readingItemInstance){
+        if(readingItemInstance) {
+            readingItemInstance.delete(flush: true)
+        }
+        readingItemInstance
+    }
+
+    ReadingItem readResource(Resource resource,UserDetail user){
+            /*ReadingItem readingItem = */
+        new ReadingItem(isRead: true, userDetail: user,resource : resource).save(flush: true, failOnError: true)
+            //ReadingItem.lock(readingItem.id)
+            /*if(readingItem.hasErrors()){
+                throw new ValidationException("Data is not valid", readingItem.errors)
+            }else if(readingItem.save(flush: true)){
+                return readingItem
+            }else{
+                throw new ValidationException("Data is not valid", readingItem.errors)
+            }
+        return readingItem*/
     }
 }
