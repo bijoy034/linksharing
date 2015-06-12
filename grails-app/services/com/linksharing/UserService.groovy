@@ -4,6 +4,7 @@ import com.linksharing.co.UserDetailCO
 import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
+import org.hibernate.FetchMode
 import org.hibernate.criterion.CriteriaSpecification
 import org.hibernate.sql.JoinType
 
@@ -13,6 +14,7 @@ class UserService {
     def fileService
     def subscriptionService
     def mailingService
+    def topicService
 
     Map register(UserDetailCO userDetailCOInstance,String fileLocation) {
         println "<====================================Register=========================================================>"
@@ -33,7 +35,9 @@ class UserService {
     Map login(String loginid,String password){
         println "<====================================Login=========================================================>"
         //UserDetail.findByPasswordAndUsername(password, loginid) ?: UserDetail.findByPasswordAndEmail(password, loginid)
+
         Map data = UserDetail.createCriteria().get {
+
                             resultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP)
                             projections{
                                 property("id","id")
@@ -60,7 +64,7 @@ class UserService {
         println "<====================================Dashboard=========================================================>"
         List<Subscription> subscriptionList = subscriptionService.listSubscription(user,[max:5])
         Map<String,Object> inbox = inbox(user,criteria)
-        [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ]
+        [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ,topicList:topicService.listTrendingTopis()]
     }
 
     Map<String,Object> inbox(Map user,Map criteria){

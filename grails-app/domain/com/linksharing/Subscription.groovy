@@ -11,7 +11,6 @@ class Subscription {
     static belongsTo = [topic:Topic,userDetail:UserDetail]
     static mapping = {
 
-        //version false
         sort(dateCreated: 'desc')
     }
     static constraints = {
@@ -19,5 +18,20 @@ class Subscription {
         userDetail()
         seriousness()
         dateCreated(format:'yyyy-MM-dd')
+    }
+
+    static namedQueries = {
+        trendingTopics{ String datePart = null ->
+            projections {
+                count("topic","countTopic")
+                "topic"{
+                    count("resource","countResource")
+                    groupProperty("resource")
+                }
+                groupProperty("topic")
+                order("countTopic","desc")
+                order("countResource","desc")
+            }
+        }
     }
 }

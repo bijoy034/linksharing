@@ -7,6 +7,7 @@ import grails.validation.ValidationException
 @Transactional
 class TopicService {
 
+
     Topic saveTopic(Topic topicInstance,Map user) {
         UserDetail userDetail = UserDetail.load(user?.id)
         Subscription subscription = new Subscription(seriousness: Seriousness.VerySerious,userDetail: userDetail)
@@ -31,6 +32,7 @@ class TopicService {
     @Transactional(readOnly = true)
     List<Topic> listAllDistinctTopic(Map user,Map criteria = [:]){
         Topic.listTopic(user?.id as Long).listDistinct(criteria)
+
     }
 
     @Transactional(readOnly = true)
@@ -48,6 +50,9 @@ class TopicService {
         }else{
             return null
         }
+    }
+    List<Topic> listTrendingTopis(){
+        Subscription.trendingTopics().listDistinct()
     }
 
     @Transactional(readOnly = true)

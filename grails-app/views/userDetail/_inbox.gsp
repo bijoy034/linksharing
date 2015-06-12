@@ -1,8 +1,6 @@
 <%@page import="com.linksharing.UserDetail; com.linksharing.Subscription; com.linksharing.Topic; com.linksharing.LinkShare;com.linksharing.DocumentResource" %>
 <g:if test="${posts.size() > 0}">
-    <div class="sb-search sb-search-open" style="
-    width: 40%;
-    ">
+    <div class="sb-search sb-search-open" style=" width: 40%; ">
         <form>
             <input class="sb-search-input" placeholder="Enter your search term..." type="text" value="" name="search">
             <input class="sb-search-submit" type="submit" value="">
@@ -11,7 +9,10 @@
     </div>
 </g:if>
 <div class="tab-container-1">
-
+<%
+    Date date1 = new Date()
+    def duration
+%>
     <g:if test="${posts.size() > 0}">
         <ul>
             <g:each in="${posts}" status="i" var="post">
@@ -25,6 +26,9 @@
                     Topic topic = post[1]
                     Subscription subscription = post[2]
                     UserDetail userDetail = post[3]
+                    use(groovy.time.TimeCategory) {
+                        duration = date1 - (link?link?.dateCreated:doc?.dateCreated)
+                    }
                 %>
                 <li >
                     <article class="entry-item clearfix">
@@ -33,7 +37,10 @@
                             <h4 class="entry-title">
                                 <a href="#">${userDetail.firstName+" "+userDetail.lastName}</a>
                                 <label style="color:#B2B2B2;display: inline;">@${userDetail.username}</label>
-                                <label style="color:#B2B2B2;display: inline;"> / 5 mnt before</label>
+                                <label style="color:#B2B2B2;display: inline;"> / ${duration.hours} hr before</label>
+                                <%
+
+                                %>
                             </h4>
                             <a href="#">${topic.name}</a>
                             <p class="entry-description">${link?link.description:""}${doc?doc.description:""}</p>

@@ -41,8 +41,8 @@
                                         </g:else>
                                     </g:if>
                                 </td>
-                                <td><a href="href">${topic.subscription.size()}</a></td>
-                                <td><a href="href">${topic.resource.size()}</a></td>
+                                <td><a href="#">${topic.subscription.size()}</a></td>
+                                <td><a href="#">${topic.resource.size()}</a></td>
                             </tr>
 
                         </table>
@@ -70,9 +70,7 @@
         </li>
 </g:each>
     </ul>
-        <div class="pagination kopa-comment-pagination">
-            <g:paginate total="${count ?: 0}" />
-        </div>
+
     </g:if>
     <g:else>
         <ul>
