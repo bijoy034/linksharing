@@ -19,4 +19,29 @@ class Topic {
         lastUpdated(format:'yyyy-MM-dd')
         resource nullable: true
     }
+    static namedQueries = {
+        listTopic {Long userId = 0 ->
+           /* or{     // duplicate entry shows due to using OR condition with offset and max
+                eq("visibility",Visibility.Public)
+                if(userId != 0) {
+                    "subscription" {
+                        eq("userDetail", UserDetail.load(userId))
+                    }
+                }
+
+            }*/
+            eq("visibility",Visibility.Public)
+            not{
+                eq("visibility",Visibility.Private)
+                if(userId != 0) {
+                    not {
+                        "subscription" {
+                            eq("userDetail", UserDetail.load(userId))
+                        }
+                    }
+                }
+            }
+
+        }
+    }
 }

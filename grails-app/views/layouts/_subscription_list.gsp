@@ -64,6 +64,9 @@
         </li>
 </g:each>
     </ul>
+        <div class="pagination kopa-comment-pagination">
+            <g:paginate total="${count ?: 0}" />
+        </div>
     </g:if>
     <g:else>
         <ul>

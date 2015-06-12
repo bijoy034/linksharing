@@ -38,4 +38,5 @@ class Resource {
         readingItem nullable: true
         resourceRating nullable: true
     }
+
 }

@@ -4,7 +4,6 @@ import grails.validation.ValidationException
 import org.springframework.validation.Errors
 import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
 class TopicController {
     def topicService
     def resourceService
@@ -13,18 +12,12 @@ class TopicController {
     static allowedMethods = [save: "POST"]
 
     def index(){}
-    def list(Topic topicInstance ) {
+    def list(Integer max, Topic topicInstance ) {
         try {
-            List<Topic> topicList = topicService.listTopic(session.user as Map)
-            List<Resource> post;
-            if (topicList.size() > 0) {
-                if (topicInstance) {
-                    post = topicService.listAllTopicPosts(topicInstance)
-                } else {
-
-                    post = topicList[0].resource as List
-                }
-                [topicList: topicList, posts: post]
+            params.max = Math.min(max ?: 2, 100)
+            Map topicMap = topicService.listTopicWithPost(topicInstance,session.user as Map,params)
+            if (topicMap) {
+                topicMap
             } else {
                 redirect(url: "/")
             }
@@ -32,7 +25,6 @@ class TopicController {
             flash.error = e.getMessage()
             redirect(url: "/")
         }
-
     }
     def show(Topic topicInstance) {
         try {

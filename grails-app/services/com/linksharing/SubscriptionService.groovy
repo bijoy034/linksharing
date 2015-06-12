@@ -5,6 +5,24 @@ import grails.validation.ValidationException
 
 @Transactional
 class SubscriptionService {
+    def topicService
+    @Transactional(readOnly = true)
+    Map listSubscriptionTopic(Topic topicInstance,Map user,Map criteria = [:]) {
+        UserDetail userDetail = UserDetail.load(user?.id)
+        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(userDetail,criteria)
+
+        List<Resource> post;
+        if (subscriptionList.size() > 0) {
+            if (topicInstance) {
+                post = topicService.listAllTopicPosts(topicInstance)
+            } else {
+                post = subscriptionList[0].topic.resource as List
+            }
+            return [topic_subscription: subscriptionList, posts: post, count: Subscription.countByUserDetail(userDetail)]
+        }else{
+            return null
+        }
+    }
 
     @Transactional(readOnly = true)
     List<Subscription> listSubscription(Map user,Map criteria = [:]) {
@@ -51,17 +69,15 @@ class SubscriptionService {
         readingItemInstance
     }
 
-    ReadingItem readResource(Resource resource,UserDetail user){
-            /*ReadingItem readingItem = */
-        new ReadingItem(isRead: true, userDetail: user,resource : resource).save(flush: true, failOnError: true)
-            //ReadingItem.lock(readingItem.id)
-            /*if(readingItem.hasErrors()){
+    ReadingItem readResource(Long resourceId,Map user){
+            ReadingItem readingItem = new ReadingItem(isRead: true, userDetail: UserDetail.load(user.id),resource : Resource.load(resourceId))
+            if(readingItem.hasErrors()){
                 throw new ValidationException("Data is not valid", readingItem.errors)
             }else if(readingItem.save(flush: true)){
                 return readingItem
             }else{
                 throw new ValidationException("Data is not valid", readingItem.errors)
             }
-        return readingItem*/
+        readingItem
     }
 }

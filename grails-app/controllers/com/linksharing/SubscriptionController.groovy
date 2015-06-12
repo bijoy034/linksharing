@@ -5,7 +5,6 @@ import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
 class SubscriptionController {
     def topicService
     def subscriptionService
@@ -28,17 +27,12 @@ class SubscriptionController {
 
     }
 
-    def list(Topic topicInstance ) {
+    def list(Integer max, Topic topicInstance ) {
         try {
-            List<Subscription> subscriptionList = subscriptionService.listSubscription(session.user as Map)
-            List<Resource> post;
-            if (subscriptionList.size() > 0) {
-                if (topicInstance) {
-                    post = topicService.listAllTopicPosts(topicInstance)
-                } else {
-                    post = subscriptionList[0].topic.resource as List
-                }
-                [topic_subscription: subscriptionList, posts: post]
+            params.max = Math.min(max ?: 2, 100)
+            Map subscriptionMap = subscriptionService.listSubscriptionTopic(topicInstance,session.user as Map,params)
+            if (subscriptionMap) {
+                subscriptionMap
             } else {
                 redirect(url: '/dashboard')
             }
@@ -47,7 +41,6 @@ class SubscriptionController {
             redirect(url: '/dashboard')
         }
     }
-
     def save(Long topic_id) {
         Subscription subscriptionInstance
         try {
@@ -77,15 +70,15 @@ class SubscriptionController {
 
     def read(Long id) {
         ReadingItem readingItem
-//        try {
-            /*readingItem = */subscriptionService.readResource(Resource.get(id),UserDetail.get(session.user.id as Long))
+        try {
+            readingItem = subscriptionService.readResource(id,session.user as Map)
             flash.message = "Item read!"
-//        }catch (ValidationException e) {
-//            readingItem.errors = e.errors
-//            flash.put("error-msg", readingItem)
-//        }catch(Throwable e){
-//            flash.message = e.getMessage()
-//        }
+        }catch (ValidationException e) {
+            readingItem.errors = e.errors
+            flash.put("error-msg", readingItem)
+        }catch(Throwable e){
+            flash.message = e.getMessage()
+        }
        redirect(url: '/dashboard')
     }
 

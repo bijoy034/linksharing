@@ -56,21 +56,25 @@ class UserService {
     }
 
     @Transactional(readOnly = true)
-    Map<String,Object> dashboard(Map user){
+    Map<String,Object> dashboard(Map user,Map criteria){
         println "<====================================Dashboard=========================================================>"
         List<Subscription> subscriptionList = subscriptionService.listSubscription(user,[max:5])
-
-        [topic_subscription:subscriptionList,users:[UserDetail.get(user?.id)],posts: inbox(user)]
+        Map<String,Object> inbox = inbox(user,criteria)
+        [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ]
     }
 
-    Object inbox(Map user){
+    Map<String,Object> inbox(Map user,Map criteria){
         println "<====================================Inbox=========================================================>"
-
-        List<Resource> resourceList =  Resource.executeQuery('''from Resource r join  r.topic t join t.subscription s join s.userDetail u
+        String hql = '''from Resource r join  r.topic t join t.subscription s join s.userDetail u
                                    where r.id not in
                                      (select r1.id from Resource r1 join r1.readingItem rd join r1.topic t1 join t1.subscription s1
                                          where rd.userDetail.id = :id
-                                         )AND u.id = :id group by r.id''',[id:user.id.toLong()])
+                                         )and u.id = :id group by r.id'''
+        List<Object> resourceList = Resource.executeQuery(hql,[id:user.id.toLong(),max : criteria.max?:5, offset: criteria.offset?:0])
+
+        int count = Resource.executeQuery(hql,[id:user.id.toLong()])?.size()
+        [posts:resourceList, count:count?:0]
+
     }
 
     def sendPasswordToMail(UserDetail user){

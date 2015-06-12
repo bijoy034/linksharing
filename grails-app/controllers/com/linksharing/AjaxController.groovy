@@ -11,10 +11,10 @@ class AjaxController {
     }
 
     def shareLink(){
-        render (template: "/ajax/shareLink",model: [topicList:topicService.listTopic(session.user as Map)])
+        render (template: "/ajax/shareLink",model: [topicList:topicService.listAllDistinctTopic(session.user as Map)])
     }
     def shareDoc(){
-        render (template: "/ajax/shareDoc",model: [topicList:topicService.listTopic(session.user as Map)])
+        render (template: "/ajax/shareDoc",model: [topicList:topicService.listAllDistinctTopic(session.user as Map)])
     }
   /*  def loadTopicPosts(Topic topicInstance){
         render (template: "/layouts/topic_posts",model: topicService.showTopic(topicInstance))

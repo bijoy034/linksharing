@@ -28,17 +28,26 @@ class TopicService {
         List<Resource> post = topicList[0].resource as List
         [topicList:topicList,users: topicList[0].subscription*.userDetail,posts: post]
     }
+    @Transactional(readOnly = true)
+    List<Topic> listAllDistinctTopic(Map user,Map criteria = [:]){
+        Topic.listTopic(user?.id as Long).listDistinct(criteria)
+    }
 
     @Transactional(readOnly = true)
-    List<Topic> listTopic(Map user){
-         Topic.createCriteria().listDistinct {
-             or{
-                 eq("visibility",Visibility.Public)
-                 "subscription"{
-                     eq("userDetail",UserDetail.get(user.id))
-                 }
-             }
-         }
+    Map listTopicWithPost(Topic topicInstance,Map user,Map criteria = [:]) {
+        List<Topic> topicList = listAllDistinctTopic(user,criteria)
+        List<Resource> post;
+        if (topicList.size() > 0) {
+            if (topicInstance) {
+                post = listAllTopicPosts(topicInstance)
+            } else {
+                post = topicList[0].resource as List
+            }
+            return [topicList: topicList, posts: post, count: Topic.listTopic(user?.id as Long).count()]
+
+        }else{
+            return null
+        }
     }
 
     @Transactional(readOnly = true)

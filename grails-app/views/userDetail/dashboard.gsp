@@ -14,12 +14,9 @@
         </div>
         <div class="widget kopa-article-list-widget">
             <h3 class="widget-title"><span class="title-line"></span><span class="title-text">Subscription</span></h3>
-            <g:render template="/layouts/subscription_list"/>
+            <g:render template="dashboard_subscription_list"/>
         </div><!--kopa-article-list-widget-->
 
-        <div class="widget kopa-article-list-widget">
-            <g:render template="/layouts/trending_topics"/>
-        </div><!--kopa-article-list-widget-->
 
     </div><!--widget-area-3-->
 
@@ -30,8 +27,11 @@
         <div class="widget kopa-article-list-widget">
             <h3 class="widget-title"><span class="title-line"></span><span class="title-text">Inbox</span></h3>
 
-            <g:render template="/layouts/inbox"/>
+            <g:render template="inbox"/>
         </div><!--kopa-article-list-widget-->
+    <div class="widget kopa-article-list-widget">
+        <g:render template="/layouts/trending_topics"/>
+    </div><!--kopa-article-list-widget-->
 
     </div><!--main-col-->
 

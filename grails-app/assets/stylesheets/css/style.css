@@ -1091,6 +1091,10 @@ Widget-area-3
 .sidebar .widget {
 	margin-top:25px;
 }
+
+#main-col .widget {
+    margin-bottom:45px;
+}
 .sidebar .widget:first-child {
 	margin-top:0;
 }
@@ -2329,22 +2333,36 @@ Single page style 1
 }
 .kopa-comment-pagination {
     float:right;
-    margin:0;
     font-size:16px;
     font-family: 'Rokkitt',serif;
 }
-.kopa-comment-pagination a {	
-    color:#333;
-    margin-left:15px;
+.kopa-comment-pagination a ,.currentStep{
+    color: #fff;
+    background-color: #428BCA;
+    margin-left: 5px;
+    padding: 6px 10px;
+    border-radius: 3px;
+}
+.currentStep{
+    background-color: #3B3B86 !important;
 }
 .kopa-comment-pagination a:hover {
-    color:#e03d3d;
+    color:#3B3B86;
 }
 .kopa-comment-pagination .current {
-    color:#e03d3d;
+    color:#3B3B86;
     margin-left:15px;
 }
-
+.nextLink{
+    border-bottom-right-radius: 11px !important;
+    border-top-right-radius: 0 !important;
+    padding-right: 13px !important;
+}
+.prevLink{
+    border-top-left-radius: 11px !important;
+    border-bottom-left-radius: 0 !important;
+    padding-left: 10px !important;
+}
 /*---Comment form---*/
 #comments-form .c-note, 
 #contact-form .c-note {
