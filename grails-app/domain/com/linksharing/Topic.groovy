@@ -30,15 +30,13 @@ class Topic {
                 }
 
             }*/
-            eq("visibility",Visibility.Public)
-            not{
-                eq("visibility",Visibility.Private)
-                if(userId != 0) {
-                    not {
-                        "subscription" {
-                            eq("userDetail", UserDetail.load(userId))
-                        }
+            not {
+                and{
+                    eq("visibility",Visibility.Private)
+                    "subscription" {
+                        ne("userDetail", UserDetail.load(1))
                     }
+
                 }
             }
 
