@@ -1,15 +1,3 @@
-<h3 class="widget-title"><span class="title-line"></span><span class="title-text">Trending Topics</span></h3>
-<div class="list-container-1">
-    <ul class="tabs-1 clearfix">
-        <li class="active"><a href="#tab-1-1">Today</a></li>
-        <li><a href="#tab-1-2">Week</a></li>
-        <li><a href="#tab-1-3">Month</a></li>
-        <li><a href="#tab-1-4">Year</a></li>
-    </ul><!--tabs-1-->
-</div>
-
-<div class="tab-container-1">
-    <div class="tab-content-1" id="tab-1-1" style="display: block;">
 
         <ul>
 <g:each in="${topicList}" status="i" var="topic">
@@ -50,7 +38,3 @@
             </li>
 </g:each>
         </ul>
-
-    </div><!--tab-content-1-->
-
-</div><!--tab-container-1-->

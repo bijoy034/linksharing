@@ -64,7 +64,7 @@ class UserService {
         println "<====================================Dashboard=========================================================>"
         List<Subscription> subscriptionList = subscriptionService.listSubscription(user,[max:5])
         Map<String,Object> inbox = inbox(user,criteria)
-        [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ,topicList:topicService.listTrendingTopis()]
+        [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ,topicList:topicService.listTrendingTopis("today")]
     }
 
     Map<String,Object> inbox(Map user,Map criteria){

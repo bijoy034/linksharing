@@ -1,5 +1,6 @@
 package com.linksharing
 
+import com.linksharing.date.CustomDate
 import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
@@ -51,8 +52,22 @@ class TopicService {
             return null
         }
     }
-    List<Topic> listTrendingTopis(){
-        Subscription.trendingTopics().listDistinct()
+    List<Topic> listTrendingTopis(String day = null){
+        Date date
+        if(day){
+            if(day == "today"){
+                date = new Date()
+            }
+            else if(day == "week"){
+                date = CustomDate.firstDayInWeek(new Date())
+            }else if(day == "month"){
+                date = CustomDate.firstDayInMonth(new Date())
+            }else if(day == " year"){
+                date = CustomDate.firstDayInYear()
+            }
+
+        }
+        Subscription.trendingTopics(date).listDistinct([max:5])
     }
 
     @Transactional(readOnly = true)

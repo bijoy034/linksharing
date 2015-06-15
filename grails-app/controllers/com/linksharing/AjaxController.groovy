@@ -16,6 +16,9 @@ class AjaxController {
     def shareDoc(){
         render (template: "/ajax/shareDoc",model: [topicList:topicService.listAllDistinctTopic(session.user as Map)])
     }
+    def trendingTopic(){
+        render (template: "/layouts/trending_topics",model: [topicList:topicService.listTrendingTopis(params.day)])
+    }
   /*  def loadTopicPosts(Topic topicInstance){
         render (template: "/layouts/topic_posts",model: topicService.showTopic(topicInstance))
 

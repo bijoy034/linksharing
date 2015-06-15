@@ -21,7 +21,7 @@ class Subscription {
     }
 
     static namedQueries = {
-        trendingTopics{ String datePart = null ->
+        trendingTopics{ Date date = null ->
             projections {
                 count("topic","countTopic")
                 "topic"{
@@ -29,8 +29,13 @@ class Subscription {
                     groupProperty("resource")
                 }
                 groupProperty("topic")
-                order("countTopic","desc")
                 order("countResource","desc")
+                order("countTopic","desc")
+            }
+            if(date){
+//                between("dateCreated",date.clearTime(),new Date())
+                ge("dateCreated",date.clearTime())
+                le("dateCreated",new Date())
             }
         }
     }
