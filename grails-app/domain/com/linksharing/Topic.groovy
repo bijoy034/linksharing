@@ -21,6 +21,7 @@ class Topic {
     }
     static namedQueries = {
         listTopic {Long userId = 0 ->
+
            /* or{     // duplicate entry shows due to using OR condition with offset and max
                 eq("visibility",Visibility.Public)
                 if(userId != 0) {
@@ -30,15 +31,22 @@ class Topic {
                 }
 
             }*/
+            projections{
+                "subscription" {
+                    groupProperty("topic")
+                }
+
+            }
             not {
                 and{
                     eq("visibility",Visibility.Private)
                     "subscription" {
-                        ne("userDetail", UserDetail.load(1))
+                        ne("userDetail", UserDetail.load(userId))
                     }
 
                 }
             }
+            order("name")
 
         }
     }

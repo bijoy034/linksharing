@@ -29,7 +29,7 @@ class SubscriptionController {
 
     def list(Integer max, Topic topicInstance ) {
         try {
-            params.max = Math.min(max ?: 2, 100)
+            params.max = Math.min(max ?: 3, 100)
             Map subscriptionMap = subscriptionService.listSubscriptionTopic(topicInstance,session.user as Map,params)
             if (subscriptionMap) {
                 subscriptionMap
@@ -41,12 +41,12 @@ class SubscriptionController {
             redirect(url: '/dashboard')
         }
     }
-    def save(Long topic_id) {
+    def save(Long topicId) {
         Subscription subscriptionInstance
         try {
-            subscriptionInstance = subscriptionService.subscribeTopic(topic_id,session.user as Map)
+            subscriptionInstance = subscriptionService.subscribeTopic(topicId,session.user as Map)
             flash.message = "successfully topic subscribed!"
-            redirect(controller: "topic", action: 'show',id: topic_id)
+            redirect(controller: "topic", action: 'show',id: topicId)
         }catch (ValidationException e) {
             subscriptionInstance.errors = e.errors
             flash.put("error-msg", subscriptionInstance)
@@ -56,12 +56,12 @@ class SubscriptionController {
             redirect(url: '/dashboard')
         }
     }
-    def remove(Long topic_id) {
+    def remove(Long topicId) {
         Subscription subscriptionInstance
         try{
-            subscriptionInstance = subscriptionService.unSubscribe(topic_id,session.user as Map)
+            subscriptionInstance = subscriptionService.unSubscribe(topicId,session.user as Map)
             flash.message = "Topic Unsubscribed!"
-            redirect(controller: "topic", action: 'show', id:topic_id)
+            redirect(controller: "topic", action: 'show', id:topicId)
         }catch(Throwable e){
             flash.message = e.getMessage()
             redirect(url: '/dashboard')
@@ -84,12 +84,12 @@ class SubscriptionController {
 
     def unRead(ReadingItem readingItem) {
         try{
-            subscriptionService.unReadReasource(readingItem)
+            subscriptionService.unReadResource(readingItem)
             flash.message = "Item unread!"
         }catch(Throwable e){
             flash.message = e.getMessage()
-            redirect(url: '/dashboard')
         }
+        redirect(url: '/dashboard')
     }
 
     def update(Subscription subscriptionInstance) {

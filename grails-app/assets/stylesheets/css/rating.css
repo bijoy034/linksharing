@@ -1,0 +1,56 @@
+.starRating{
+    float: right;
+}
+.starRating:not(old){
+    display        : inline-block;
+    width          : 7.5em;
+    height         : 1.5em;
+    overflow       : hidden;
+    vertical-align : bottom;
+}
+.starRating:not(old) > input{
+    margin-right : -100%;
+    opacity      : 0;
+}
+.starRating:not(old) > label{
+    display         : block;
+    float           : right;
+    position        : relative;
+    background      : url('../../images/placeholders/star-off.svg');
+    background-size : contain;
+}
+.starRating:not(old) > label:before{
+    content         : '';
+    display         : block;
+    width           : 1.5em;
+    height          : 1.5em;
+    background      : url('../../images/placeholders/star-on.svg');
+    /*background: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cG9seWdvbiBmaWxsPSIjRkZERjg4IiBwb2ludHM9IjEwLDAgMTMuMDksNi41ODMgMjAsNy42MzkgMTUsMTIuNzY0IDE2LjE4LDIwIDEwLDE2LjU4MyAzLjgyLDIwIDUsMTIuNzY0IDAsNy42MzkgNi45MSw2LjU4MyAiLz48L3N2Zz4=');*/
+    background-size : contain;
+    opacity         : 0;
+    transition      : opacity 0.2s linear;
+}
+.starRating:not(old) > label:hover:before,
+.starRating:not(old) > label:hover ~ label:before,
+.starRating:not(:hover) > :checked ~ label:before{
+    opacity : 1;
+}
+.rate{
+background:url('../../images/placeholders/rate.png') no-repeat;
+    float: right;
+    height: 45px;
+    width: 45px;
+    margin-top: -13px;
+    position: relative;
+}
+
+.rate span{
+    display: block;
+    position: absolute;
+    left: 12px;
+    top: 16px;
+    color: rgba(173, 46, 30, 1);
+    font-weight: bold;
+    font-size: 14px;
+}
+

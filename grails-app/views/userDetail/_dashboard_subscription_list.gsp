@@ -1,6 +1,9 @@
 
 <div class="tab-container-1">
     <g:if test="${topicSubscription.size() > 0}">
+        <g:if test="${topicSubscription.size() == 5}">
+            <g:link controller="subscription" action="list" class="view-all">View All</g:link>
+            </g:if>
         <ul>
             <g:each in="${topicSubscription}" status="i" var="subscribe">
                 <li>
@@ -15,13 +18,7 @@
                                         <g:link controller="subscription" action="list" id="${subscribe.topic.id}">${subscribe.topic.name}</g:link>
                                     </th>
                                 </tr>
-                                <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
-                                    <tr class="entry-content edit-text" style="display: none;">
-                                        <th colspan="2"><g:textField name="topic.name" value="${subscribe.topic.name}"/> </th>
-                                        <th><g:submitButton name="editTopic" value="Save" class="form-input-button-blue"/></th>
-                                        <th><input type="reset" value="Cancel" class="form-input-button-blue"/></th>
-                                    </tr>
-                                </g:if>
+                                <c:updateTopicForm  topic="${subscribe.topic}" user="${session.user}"/>
                                 <tr class="entry-content">
                                     <th colspan="2" style="color: #B2B2B2;">@${subscribe.topic.createdBy.username}</th>
                                     <th>Subscriptions</th>
@@ -29,14 +26,7 @@
                                 </tr>
                                 <tr class="entry-content">
                                     <td colspan="2">
-                                        <g:if test="${subscribe.topic.createdBy.id != session.user?.id}">
-                                            <g:if test="${subscribe.userDetail.id == session.user?.id}">
-                                                <g:link controller="subscription" action="remove" params="['topic_id':subscribe.topic.id]">Unsubscribe</g:link>
-                                            </g:if>
-                                            <g:else>
-                                                <g:link controller="subscription" action="save" params="['topic_id':subscribe.topic.id]">Subscribe</g:link>
-                                            </g:else>
-                                        </g:if>
+                                        <c:subscribeLink topic="${subscribe.topic}" user="${session.user}" />
                                     </td>
                                     <td><a href="href">${subscribe.topic.subscription.size()}</a></td>
                                     <td><a href="href">${subscribe.topic.resource.size()}</a></td>
@@ -44,19 +34,14 @@
 
                             </table>
                         </div>
-                        <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
-                            <g:select class="select"  name="topic.visibility" from="${com.linksharing.Visibility}" value="${subscribe.topic.visibility}" required="required"></g:select>
-                        </g:if>
-                        <g:field type="hidden" name="id" value="${subscribe.id}" />
-                        <g:select class="select" name="seriousness" from="${com.linksharing.Seriousness}" value="${subscribe.seriousness}" required="required"></g:select>
-
+                        <c:selectUserVisibility  topic="${subscribe.topic}" user="${session.user}"/>
+                        <c:selectSubscriptionSeriousness  topic="${subscribe.topic}" user="${session.user}"/>
 
                         <div class="edit">
-                            <a href="#" class="invite"><asset:image src="placeholders/email-icon.png" class="modal-form" alt="" /></a>
-                            <g:if test="${subscribe.topic.createdBy.id == session.user?.id}">
-                                <a href="#" class="edit-topic"><asset:image src="placeholders/editor.png" alt="" /></a>
-                                <a href="#"><asset:image src="placeholders/trash.png" alt="" /></a>
-                            </g:if>
+                        <g:remoteLink controller="ajax" action="inlineInvite" update="actionBody" id="${subscribe.topic.id}" title="Send Invitation" >
+                            <asset:image src="placeholders/email-icon.png" class="modal-form" alt="" />
+                        </g:remoteLink>
+                        <c:updateTopicLink  topic="${subscribe.topic}" user="${session.user}"/>
                         </div>
                         <div id="${i}${i}"></div>
                     </article>

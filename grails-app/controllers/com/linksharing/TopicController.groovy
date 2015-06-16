@@ -44,7 +44,7 @@ class TopicController {
                 redirect(url: "/")
             }else if(resourceInstance){
                 Resource resource = resourceService.showResource(resourceInstance)
-                [post: resource]
+                [post: resource,topicList:topicService.listTrendingTopis("today")]
             }
         }catch(Throwable e){
             flash.error = e

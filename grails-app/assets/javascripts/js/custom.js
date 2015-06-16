@@ -32,6 +32,12 @@ jQuery(document).ready(function(){
 	jQuery(".edit-subscription .select").change(function(){
 		$(this).parent("article").parent("form").submit();
 	});
+	jQuery("#ttopic li a").click(function(){
+		jQuery("#ttopic").children("li").removeClass("active");
+		jQuery("#ttopic").children("li").removeAttr("style")
+		jQuery(this).parent("li").addClass("active");
+		jQuery(this).parent("li").attr("style","font-weight:bold");
+	});
 
     if(jQuery("#comments-form").length > 0){
 	// Validate the contact form

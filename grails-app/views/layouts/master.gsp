@@ -20,7 +20,7 @@
     <asset:stylesheet src="css/bootstrap-responsive.css"/>
     <asset:stylesheet src="css/responsive.css"/>
     <asset:stylesheet src="css/coban.css"/>
-
+    <asset:stylesheet src="css/rating.css"/>
 
     <asset:javascript src="js/modernizr.custom.js"/>
 
@@ -100,7 +100,7 @@
                                     </g:remoteLink><span></span>
                                 </li>
                                 <li>
-                                    <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt=""/></a><span></span>
+                                    <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt="" style="box-shadow: 0 0 8px rgba(231, 231, 231, 1);"/></a><span></span>
                                     <ul>
                                         <li><a href="gallery.html">Profile</a></li>
                                         <li><a href="video.html">Users</a></li>
@@ -179,6 +179,7 @@
 <asset:javascript src="js/uisearch.js"/>
 <asset:javascript src="js/jquery.validate.min.js"/>
 <asset:javascript src="js/custom.js"/>
+<asset:javascript src="js/ajax.js"/>
 
 <script>
     new UISearch(document.getElementById('sb-search'));

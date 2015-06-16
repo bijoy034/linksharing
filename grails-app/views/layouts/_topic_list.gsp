@@ -13,16 +13,10 @@
                             <table >
                             <tr class="entry-content show-text">
                                 <th colspan="4" style="text-align: left;  padding-left: 12px;">
-                                    <g:link controller="topic" action="show" id="${topic.id}">${topic.name}</g:link>
+                                    <g:link controller="topic" action="list" id="${topic.id}">${topic.name}</g:link>
                                 </th>
                             </tr>
-                            <g:if test="${topic.createdBy.id == session.user?.id}">
-                                <tr class="entry-content edit-text" style="display: none;">
-                                    <th colspan="2"><g:textField name="topic.name" value="${topic.name}"/> </th>
-                                    <th><g:submitButton name="editTopic" value="Save" class="form-input-button-blue"/></th>
-                                    <th><input type="reset" value="Cancel" class="form-input-button-blue"/></th>
-                                </tr>
-                            </g:if>
+                            <c:updateTopicForm  topic="${topic}" user="${session.user}"/>
 
                             <tr class="entry-content">
                                 <th colspan="2" style="color: #B2B2B2;">@${topic.createdBy.username}</th>
@@ -32,14 +26,7 @@
 
                             <tr class="entry-content">
                                 <td colspan="2">
-                                    <g:if test="${topic.createdBy.id != session.user?.id}">
-                                        <g:if test="${topic.subscription.userDetail.id.flatten().contains(session.user?.id)}">
-                                            <g:link controller="subscription" action="remove" params="['topic_id':topic.id]">Unsubscribe</g:link>
-                                        </g:if>
-                                        <g:else>
-                                            <g:link controller="subscription" action="save" params="['topic_id':topic.id]">Subscribe</g:link>
-                                        </g:else>
-                                    </g:if>
+                                    <c:subscribeLink topic="${topic}" user="${session.user}" />
                                 </td>
                                 <td><a href="#">${topic.subscription.size()}</a></td>
                                 <td><a href="#">${topic.resource.size()}</a></td>
@@ -47,22 +34,15 @@
 
                         </table>
                         </div>
-                        <g:if test="${topic.createdBy.id == session.user?.id}">
-                            <g:select class="select" name="topic.visibility" from="${com.linksharing.Visibility}" value="${topic.visibility}" required="required"></g:select>
-                        </g:if>
 
-                        <g:if test="${topic.subscription.userDetail.id.flatten().contains(session.user?.id)}">
-                            <g:select class="select"  name="seriousness" from="${com.linksharing.Seriousness}" value="${topic.subscription.find{it.userDetail.id == session.user.id}?.seriousness}" required="required"></g:select>
-                            <g:field type="hidden" name="id" value="${topic.subscription.find{it.userDetail.id == session.user?.id}?.id}" />
-                        </g:if>
-
+                        <c:selectUserVisibility  topic="${topic}" user="${session.user}"/>
+                        <c:selectSubscriptionSeriousness  topic="${topic}" user="${session.user}"/>
 
                         <div class="edit">
-                            <a href="#" class="invite"><asset:image src="placeholders/email-icon.png" class="modal-form" alt="" /></a>
-                        <g:if test="${topic.createdBy.id == session.user?.id}">
-                            <a href="#" class="edit-topic"><asset:image src="placeholders/editor.png" alt="" /></a>
-                            <a href="#"><asset:image src="placeholders/trash.png" alt="" /></a>
-                        </g:if>
+                        <g:remoteLink controller="ajax" action="inlineInvite" update="actionBody" id="${topic.id}" title="Send Invitation" >
+                            <asset:image src="placeholders/email-icon.png" class="modal-form" alt="" />
+                        </g:remoteLink>
+                            <c:updateTopicLink  topic="${topic}" user="${session.user}"/>
                         </div>
                         <div id="${i}${i}"></div>
                     </article>
@@ -70,7 +50,9 @@
         </li>
 </g:each>
     </ul>
-
+        <div class="pagination kopa-comment-pagination">
+            <g:paginate total="${count ?: 0}" />
+        </div>
     </g:if>
     <g:else>
         <ul>

@@ -32,7 +32,9 @@ class TopicService {
     }
     @Transactional(readOnly = true)
     List<Topic> listAllDistinctTopic(Map user,Map criteria = [:]){
-        Topic.listTopic(user?.id as Long).listDistinct(criteria)
+        List<Topic> topics = Topic.listTopic(user?.id as Long).listDistinct(criteria)
+        println topics
+        topics
 
     }
 
@@ -46,7 +48,9 @@ class TopicService {
             } else {
                 post = topicList[0].resource as List
             }
-            return [topicList: topicList, posts: post, count: Topic.listTopic(user?.id as Long).count()]
+            int size = Topic.listTopic(user?.id as Long).listDistinct().size()
+            println(size)
+            return [topicList: topicList, posts: post, count: size]
 
         }else{
             return null

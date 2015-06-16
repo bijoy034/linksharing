@@ -9,10 +9,7 @@
 
 <p class="input-block clearfix">
     <label class="required">Topic <span>*</span></label>
-    <select name="visibility" class="form-input">
-        <option>Topic 1</option>
-        <option>Topic 2</option>
-    </select>
+    <g:select id="topic"  name="topic.id" from="${topicList}" optionKey="id" optionValue="name" required="required"  class="form-input"></g:select>
 </p>
     <p class="contact-button clearfix">
         <input type="reset" class="form-input form-input-button" value="Cancel">

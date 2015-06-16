@@ -11,7 +11,7 @@
 <div class="widget-area-3 sidebar">
 
 	<div class="widget kopa-article-list-widget">
-		<h3 class="widget-title"><span class="title-line"></span><span class="title-text">${topicList[0].name}</span></h3>
+		<h3 class="widget-title"><span class="title-line"></span><span class="title-text">Topic Detail</span></h3>
 		<g:render template="/layouts/topic_list"/>
 	</div>
 

@@ -32,8 +32,8 @@
     <div class="widget kopa-article-list-widget">
         <h3 class="widget-title"><span class="title-line"></span><span class="title-text">Trending Topics</span></h3>
         <div class="list-container-1">
-            <ul class="clearfix">
-                <li class="active">
+            <ul class="clearfix" id="ttopic">
+                <li class="active" style="font-weight: bold;">
                     <g:remoteLink controller="ajax" action="trendingTopic" params="${[day:"today"]}" update="trending-body" >
                         Today
                     </g:remoteLink>

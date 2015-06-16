@@ -13,6 +13,38 @@ class ResourceService {
         Resource.get(resourceInstance.id)
     }
 
+    Resource rateResource(Long resourceId,Integer score, Map user){
+        if(score){
+            Resource resource = Resource.load(resourceId)
+            UserDetail userDetail = UserDetail.load(user?.id)
+            ResourceRating rating = getRating(resource,userDetail)
+            if(!rating){
+                //insert
+                rating = new ResourceRating(resource:resource,userDetail:userDetail)
+            }
+            rating.score = score
+            if (rating.save(flush: true)) {
+                return resource
+            } else {
+                throw new ValidationException("Invalid Data",rating.errors)
+            }
+        }
+        null
+    }
+
+    ResourceRating getRating(Resource resource,UserDetail userDetail){
+        ResourceRating rating = ResourceRating.findByResourceAndUserDetail(resource,userDetail)
+    }
+
+    Double getAvgRating(Resource resource){
+            ResourceRating.createCriteria().get {
+                projections{
+                    avg("score")
+                }
+                eq("resource",resource )
+            }
+    }
+
     LinkShare shareLink(LinkShare linkShareInstance,Map user){
         ReadingItem item = new ReadingItem(userDetail: user?.id,isRead: true)
         linkShareInstance.addToReadingItem(item)

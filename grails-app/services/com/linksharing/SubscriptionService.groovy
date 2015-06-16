@@ -8,6 +8,9 @@ class SubscriptionService {
     def topicService
     @Transactional(readOnly = true)
     Map listSubscriptionTopic(Topic topicInstance,Map user,Map criteria = [:]) {
+        criteria.sort = "seriousness"
+        criteria.order = "desc"
+
         UserDetail userDetail = UserDetail.load(user?.id)
         List<Subscription> subscriptionList = Subscription.findAllByUserDetail(userDetail,criteria)
 
@@ -26,6 +29,8 @@ class SubscriptionService {
 
     @Transactional(readOnly = true)
     List<Subscription> listSubscription(Map user,Map criteria = [:]) {
+        criteria.sort = "seriousness"
+        criteria.order = "desc"
         UserDetail userDetail = UserDetail.load(user?.id)
         Subscription.findAllByUserDetail(userDetail,criteria)
     }

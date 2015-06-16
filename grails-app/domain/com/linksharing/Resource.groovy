@@ -2,7 +2,7 @@ package com.linksharing
 
 import com.linksharing.co.ResourceCO
 
-class Resource {
+class Resource{
     //String title
     String description
     Date dateCreated
