@@ -25,9 +25,8 @@
 
 	<div class="widget kopa-article-list-widget">
 		<h3 class="widget-title"><span class="title-line"></span><span class="title-text">Posts</span></h3>
-		<div id="topicPost">
 			<g:render template="/layouts/topic_posts"/>
-		</div>
+
 	</div><!--kopa-article-list-widget-->
 
 </div><!--main-col-->

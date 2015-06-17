@@ -20,6 +20,8 @@ class CustomTagLib {
         use(groovy.time.TimeCategory) {
             duration = date1 - attrs.post?.dateCreated
         }
+        out << """<b style="border-bottom:1px solid #CCC;">&nbsp;&nbsp;&nbsp;Post Time&nbsp;&nbsp;&nbsp;</b>
+                                            <br>"""
         if(duration.days > 0){
             out << "<img src=\"${assetPath(src: 'placeholders/clock.png')}\" /> " + new java.text.SimpleDateFormat(attrs.format).format(attrs.post?.dateCreated)
         }
@@ -36,14 +38,20 @@ class CustomTagLib {
     }
 
     def subscribeLink={attr,body->
-
-        if(attr.topic.createdBy.id != attr.user?.id){
-            if(attr.topic.subscription.userDetail.id.flatten().contains(attr.user?.id)){
-                out <<  g.link(controller:"subscription",action:"remove",params: ['topic_id':attr.topic.id]){"Unsubscribe"}
-            }else{
-                out << g.link(controller:"subscription",action:"save",params: ['topic_id':attr.topic.id] ){"Subscribe"}
+        if(attr?.user) {
+            if (attr.topic.createdBy.id != attr.user?.id) {
+                if (attr.topic.subscription.userDetail.id.flatten().contains(attr.user?.id)) {
+                    out << g.link(controller: "subscription", action: "remove", params: ['topicId': attr.topic.id], class: "subscribe-link") {
+                        "Unsubscribe"
+                    }
+                } else {
+                    out << g.link(controller: "subscription", action: "save", params: ['topicId': attr.topic.id], class: "subscribe-link") {
+                        "Subscribe"
+                    }
+                }
             }
         }
+
     }
     def selectUserVisibility={attr,body->
         if(attr.topic.createdBy.id == attr.user?.id){
@@ -58,22 +66,24 @@ class CustomTagLib {
     }
 
     def updateTopicLink={attr,body->
+        out << """<div class="edit">"""
+        if(attr.topic.subscription.userDetail.id.flatten().contains(attr.user?.id)){
+            String img = """<img src="${assetPath(src: "placeholders/email-icon.png")}" alt="" />"""
+            out << g.remoteLink(controller: "ajax",action: "inlineInvite", update: "actionBody", id: attr.topic.id,title: "Send Invitation",class: "modal-form"){img}
+        }
         if(attr.topic.createdBy.id == attr.user?.id){
-            out <<  """<a href="#" class="edit-topic"><img src="${assetPath(src: 'placeholders/editor.png')}" /></a>"""
+            out <<  """<a style="cursor:pointer;" class="edit-topic"><img src="${assetPath(src: 'placeholders/editor.png')}" /></a>"""
             out <<  """<a href="#" ><img src="${assetPath(src: 'placeholders/trash.png')}" /></a>"""
         }
+        out << "</div>"
     }
 
     def updateTopicForm={attr,body->
         if(attr.topic.createdBy.id == attr.user?.id){
             out <<  """ <tr class="entry-content edit-text" style="display: none;">
                             <th colspan="2">
-                                ${g.textField(name: "topic.name",value:attr.topic.name)}
-                            </th>
-                            <th>
+                                ${g.textField(name: "topic.name",value:attr.topic.name,style: "width: 59%;margin-top: -2px;")}
                                 ${g.submitButton(name: "editTopic",value:"Save",class:"form-input-button-blue" )}
-                            </th>
-                            <th>
                                 <input type="reset" value="Cancel" class="form-input-button-blue"/>
                             </th>
                        </tr>"""
@@ -148,7 +158,7 @@ class CustomTagLib {
 
     def resourceCreatedByDetail={attr, body ->
         out << """<div class="entry-thumb" >
-                        <a href="#" >
+                        <a href="${createLink(uri: "/user/${attr.resource.createdBy.id}")}" >
                         <img src="${resource(dir: 'images/profile', file: "${attr.resource.createdBy.photo ?: 'user.png'}")}" alt=""/>
                         </a>
                     </div>
@@ -157,6 +167,21 @@ class CustomTagLib {
                             <a href="#" style="font-size: 14px;">${attr.resource.createdBy.firstName + " " + attr.resource.createdBy.lastName}</a>
                             <br>
                             <label style="color:#B2B2B2;display: inline;">@${attr.resource.createdBy.username}</label>
+                         </h4>
+                </div>"""
+    }
+
+    def topicCreatedByDetail={attr, body ->
+        out << """<div class="entry-thumb" >
+                        <a href="${createLink(uri: "/user/${attr.topic.createdBy.id}")}" >
+                        <img src="${resource(dir: 'images/profile', file: "${attr.topic.createdBy.photo ?: 'user.png'}")}" alt=""/>
+                        </a>
+                    </div>
+                    <div class="entry-content" style="float: left;">
+                        <h4 class="entry-title">
+                            <a href="#" style="font-size: 14px;">${attr.topic.createdBy.firstName + " " + attr.topic.createdBy.lastName}</a>
+                            <br>
+                            <label style="color:#B2B2B2;display: inline;">@${attr.topic.createdBy.username}</label>
                          </h4>
                 </div>"""
     }
@@ -175,17 +200,43 @@ class CustomTagLib {
     def viewResource={attr, body->
         out << """<div style=" height: 30px;">
                         <div style="float: left;">
-                            <a href="#" style="font-size:20px;">${attr.resource.topic.name}</a>
+                        ${g.link(controller: "topic",action: "show",id:attr.resource.topic.id ,style:"font-size:20px;"){attr.resource.topic.name} }
                         </div>
                         <div id="avgRatingBody${attr.resource.id}">
                             ${c.avgRatingLabel(post:attr.resource )}
                         </div>
                     </div>
-                    <p class="entry-description" style="max-height: none;overflow: auto;">${attr.resource.description}</p>
+
                     <div style="height:25px;">
-                        <label style="color:#B2B2B2;display: inline;float: left">
+                        <label style="color: #B2B2B2;display: block;width: 100%;text-align: right;">
                         ${c.postTime(post:attr.resource,format:"MMMM dd, yyyy")}
                         </label>
-                     </div>"""
+                     </div>
+                        <p class="entry-description" style="max-height: none;overflow: auto;">${attr.resource.description}</p>
+                        """
+    }
+
+    def userMenu={attr,body ->
+        out << """<a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt="" style="box-shadow: 0 0 8px rgba(231, 231, 231, 1);"/></a><span></span>
+                  <ul>
+                    <li>
+                        ${g.link(url: createLink(uri: "/profile")){"Profile"}}
+                    </li>"""
+        UserDetail userDetail = UserDetail.load(session.user?.id)
+        if(userDetail.admin) {
+            out << """<li>
+                        ${g.link(url: "#") { "Users" }}
+                    </li>
+        `           <li>
+                        ${g.link(url: "#") { "Topics" }}
+                    </li>
+                    <li>
+                        ${g.link(url: "#") { "Posts" }}
+                    </li>"""
+        }
+        out <<   """<li>
+                        ${g.link(controller: "login",action: "logout"){"Logout"}}
+                    </li>
+"""
     }
 }

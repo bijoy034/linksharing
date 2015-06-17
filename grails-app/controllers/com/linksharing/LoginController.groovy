@@ -12,9 +12,11 @@ import static org.springframework.http.HttpStatus.NOT_FOUND
 
 class LoginController {
     def userService
+    def topicService
     static allowedMethods = [login: 'POST', register: 'POST', logout: 'GET']
 
 
+    def index(){[topicList:topicService.listTrendingTopis("today")]}
     def login(String loginid,String password){
         withForm {
             try {
@@ -66,7 +68,6 @@ class LoginController {
 
     }
 
-    @Transactional
     def register(UserDetailCO userDetailCOInstance) {
          withForm {
              try {

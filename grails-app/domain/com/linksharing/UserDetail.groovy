@@ -4,14 +4,7 @@ import com.linksharing.co.UserDetailCO
 import org.springframework.web.multipart.MultipartFile
 
 class UserDetail {
-    UserDetail(UserDetailCO userDetailCO) {
-        this.email = userDetailCO.email
-        this.username = userDetailCO.username
-        this.password = userDetailCO.password
-        this.firstName = userDetailCO.firstName
-        this.lastName = userDetailCO.lastName
-        this.photo = userDetailCO.photo.originalFilename
-    }
+
 
     String email
     String username

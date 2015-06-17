@@ -8,11 +8,7 @@ class SubscriptionService {
     def topicService
     @Transactional(readOnly = true)
     Map listSubscriptionTopic(Topic topicInstance,Map user,Map criteria = [:]) {
-        criteria.sort = "seriousness"
-        criteria.order = "desc"
-
-        UserDetail userDetail = UserDetail.load(user?.id)
-        List<Subscription> subscriptionList = Subscription.findAllByUserDetail(userDetail,criteria)
+        List<Subscription> subscriptionList = listSubscription(user,criteria)
 
         List<Resource> post;
         if (subscriptionList.size() > 0) {
@@ -21,7 +17,7 @@ class SubscriptionService {
             } else {
                 post = subscriptionList[0].topic.resource as List
             }
-            return [topic_subscription: subscriptionList, posts: post, count: Subscription.countByUserDetail(userDetail)]
+            return [topic_subscription: subscriptionList, posts: post, count: Subscription.countByUserDetail(UserDetail.load(user?.id))]
         }else{
             return null
         }
@@ -67,7 +63,8 @@ class SubscriptionService {
         subscription
     }
 
-    ReadingItem unReadResource(ReadingItem readingItemInstance){
+    ReadingItem unReadResource(Long resourceId,Map user){
+        ReadingItem readingItemInstance = ReadingItem.findByResourceAndUserDetail(Resource.load(resourceId),UserDetail.load(user?.id))
         if(readingItemInstance) {
             readingItemInstance.delete(flush: true)
         }

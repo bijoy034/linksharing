@@ -23,7 +23,7 @@
         <g:message code="linkShare.topic.label" default="Topic" />
         <span>*</span>
     </label>
-    <g:select id="topic"  name="topic.id" from="${topicList}" optionKey="id" optionValue="name" required="required"  class="form-input"></g:select>
+    <g:select id="topic"  name="topic.id" from="${topicList}"   optionKey="topicId" optionValue="topic"  required="required"  class="form-input"></g:select>
 </p>
 <g:field type="hidden" id="createdBy" name="createdBy.id"  value="${session.user?.id}"/>
     <p class="contact-button clearfix">

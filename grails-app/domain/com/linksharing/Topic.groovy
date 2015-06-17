@@ -19,6 +19,11 @@ class Topic {
         lastUpdated(format:'yyyy-MM-dd')
         resource nullable: true
     }
+
+
+    String toString(){
+        name
+    }
     static namedQueries = {
         listTopic {Long userId = 0 ->
 

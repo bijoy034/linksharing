@@ -17,7 +17,7 @@
 
 	<div class="widget kopa-article-list-widget">
 		<h3 class="widget-title"><span class="title-line"></span><span class="title-text">Subscribers</span></h3>
-		<g:render template="/layouts/user_profile"/>
+		<g:render template="/userDetail/user_profile"/>
 	</div>
 
 </div><!--widget-area-3-->

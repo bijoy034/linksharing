@@ -1,6 +1,9 @@
 package com.linksharing
 
-import grails.transaction.Transactional
+import com.linksharing.co.UserDetailCO
+import com.linksharing.co.UserPasswordCO
+import com.linksharing.co.UserProfileCO
+import grails.validation.ValidationException
 
 class UserDetailController {
     def userService
@@ -19,10 +22,59 @@ class UserDetailController {
             redirect(url: '/')
         }
     }
-    /*def inbox(){
-       // [posts:userService.inbox(session.user as Map)]
-        render userService.inbox(session.user as Map)
-    }*/
+    def user(UserDetail userDetailInstance,Integer max){
+        params.max = Math.min(max ?: 10, 100)
+        userService.userProfile(userDetailInstance,params)
+    }
+    def profile(Integer max){
+        println "Profile reached"
+        params.max = Math.min(max ?: 10, 100)
+        userService.profile(session.user as Map,params)
+    }
+    def updateProfile(UserProfileCO profileCO) {
+        withForm {
+            try {
+                String path = grailsApplication.mainContext.servletContext.getRealPath("images/profile")
+                Map user = userService.updateProfile(profileCO,path)
+                if(user) {
+                    flash.message = "Information updated"
+                    session.user.photo = user.photo
+                    session.user.username = user.username
+                }else{
+                    flash.message = "Try again"
+                }
+            }catch (ValidationException e) {
+                profileCO.errors = e.errors
+                flash.put("error-msg", profileCO)
+            }catch(Throwable e){
+                flash.message = e.getMessage()
+            }
+        }
+        redirect(url: '/profile')
+    }
+
+    def updatePassword(UserPasswordCO passwordCO) {
+
+        withForm {
+            try {
+                if(userService.updatePassword(passwordCO)) {
+                    flash.message = "Password Changed"
+                }else{
+                    flash.message = "Try again"
+                }
+            }catch (ValidationException e) {
+                passwordCO.errors = e.errors
+                flash.put("error-msg-pw", passwordCO)
+            }catch(Throwable e){
+                flash.message = e.getMessage()
+            }
+        }
+        redirect(url: '/profile')
+
+
+    }
+
+
 
 
 }

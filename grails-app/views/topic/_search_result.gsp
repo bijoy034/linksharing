@@ -1,9 +1,9 @@
 <%@ page import="com.linksharing.Seriousness" %>
 
 <div class="tab-container-1">
-    <g:if test="${topicList?.size() > 0}">
+    <g:if test="${searchList?.size() > 0}">
     <ul>
-<g:each in="${topicList}" status="i" var="topic">
+<g:each in="${searchList}" status="i" var="topic">
         <li style="margin: auto;">
     <g:form name="form${i}" url="[controller: 'subscription', action: 'update']"   class="edit-subscription">
 
@@ -11,7 +11,7 @@
             <table style="width: 100%;">
                 <tr class="entry-content show-text" style="height: 40px">
                     <td style="font-size: 20px;text-align: left;" colspan="2">
-                        <g:link controller="topic" action="list" id="${topic.id}">${topic.name}</g:link>
+                        <g:link controller="subscription" action="list" id="${topic.id}">${topic.name}</g:link>
                         <br>
                         <label style="color: #B2B2B2;display: block;width: 100%;text-align: right;">
                             <b style="border-bottom:1px solid #CCC;">&nbsp;&nbsp;Creation Date&nbsp;&nbsp;</b>

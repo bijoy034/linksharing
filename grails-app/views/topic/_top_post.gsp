@@ -1,15 +1,6 @@
 <%@page import="com.linksharing.LinkShare;com.linksharing.DocumentResource" %>
-<g:if test="${posts.size() > 0}">
-    <div class="sb-search sb-search-open" style=" width: 40%;margin-top: -11px">
-        <form>
-            <input class="sb-search-input" placeholder="Enter your search term..." type="text" value="" name="search">
-            <input class="sb-search-submit" type="submit" value="">
-            <span class="sb-icon-search"></span>
-        </form>
-    </div>
-    </g:if>
 <div id="topicPost">
-    <div class="tab-container-1" style="  margin-top: 48px;">
+    <div class="tab-container-1" >
 
     <g:if test="${posts.size() > 0}">
         <ul>

@@ -47,12 +47,11 @@
 
                         <div class="sb-search-wrapper">
                             <div id="sb-search" class="sb-search">
-                                <form>
-                                    <input class="sb-search-input" placeholder="Enter your search term..." type="text"
-                                           value="" name="search" id="search">
-                                    <input class="sb-search-submit" type="submit" value="">
+                                <g:form controller="topic" action="search">
+                                    <g:textField name="search" class="sb-search-input" placeholder="Enter your search term..."/>
+                                    <g:submitButton class="sb-search-submit"  value="" name="searchBtn"/>
                                     <span class="sb-icon-search"></span>
-                                </form>
+                                </g:form>
                             </div><!--sb-search-->
                         </div><!--sb-search-wrapper-->
 
@@ -100,14 +99,7 @@
                                     </g:remoteLink><span></span>
                                 </li>
                                 <li>
-                                    <a href="#"><img src="${resource(dir: 'images/profile',file:"${session.user?.photo?:'user.png'}")}" alt="" style="box-shadow: 0 0 8px rgba(231, 231, 231, 1);"/></a><span></span>
-                                    <ul>
-                                        <li><a href="gallery.html">Profile</a></li>
-                                        <li><a href="video.html">Users</a></li>
-                                        <li><a href="elements.html">Topics</a></li>
-                                        <li><a href="404.html">Posts</a></li>
-                                        <li><g:link controller="login" action="logout">Logout</g:link></li>
-                                    </ul>
+                                    <c:userMenu/>
                                 </li>
 
                             </ul><!--main-menu-->
@@ -132,6 +124,14 @@
             <g:hasErrors bean="${flash.get("error-msg")}">
                 <ul class="error" role="alert">
                     <g:eachError bean="${flash.get("error-msg")}" var="error">
+                        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
+                                error="${error}"/></li>
+                    </g:eachError>
+                </ul>
+            </g:hasErrors>
+            <g:hasErrors bean="${flash.get("error-msg-pw")}">
+                <ul class="error" role="alert">
+                    <g:eachError bean="${flash.get("error-msg-pw")}" var="error">
                         <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
                                 error="${error}"/></li>
                     </g:eachError>
@@ -180,6 +180,7 @@
 <asset:javascript src="js/jquery.validate.min.js"/>
 <asset:javascript src="js/custom.js"/>
 <asset:javascript src="js/ajax.js"/>
+<asset:javascript src="js/jquery.flexslider-min.js"/>
 
 <script>
     new UISearch(document.getElementById('sb-search'));

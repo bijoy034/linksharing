@@ -20,7 +20,7 @@ jQuery(document).ready(function(){
 		jQuery(".bg-image").show();
 	});
 	jQuery(".edit-topic").click(function(){
-		var elem = jQuery(this).parent("div").parent("article");
+		var elem = jQuery(this).parent("div").parent("div").parent("article");
 		elem.find(".show-text").toggle();
 		elem.find(".edit-text").toggle();
 	});
@@ -30,11 +30,18 @@ jQuery(document).ready(function(){
 		elem.hide();
 	});
 	jQuery(".edit-subscription .select").change(function(){
-		$(this).parent("article").parent("form").submit();
+		$(this).parent("div").parent("article").parent("form").submit();
 	});
 	jQuery("#ttopic li a").click(function(){
 		jQuery("#ttopic").children("li").removeClass("active");
 		jQuery("#ttopic").children("li").removeAttr("style")
+		jQuery(this).parent("li").addClass("active");
+		jQuery(this).parent("li").attr("style","font-weight:bold");
+	});
+
+	jQuery("#tpost li a").click(function(){
+		jQuery("#tpost").children("li").removeClass("active");
+		jQuery("#tpost").children("li").removeAttr("style")
 		jQuery(this).parent("li").addClass("active");
 		jQuery(this).parent("li").attr("style","font-weight:bold");
 	});

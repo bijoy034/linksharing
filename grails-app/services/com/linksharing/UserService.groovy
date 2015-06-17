@@ -1,6 +1,8 @@
 package com.linksharing
 
 import com.linksharing.co.UserDetailCO
+import com.linksharing.co.UserPasswordCO
+import com.linksharing.co.UserProfileCO
 import com.linksharing.dto.UserDetailDTO
 import grails.transaction.Transactional
 import grails.validation.ValidationException
@@ -16,9 +18,11 @@ class UserService {
     def mailingService
     def topicService
 
+
     Map register(UserDetailCO userDetailCOInstance,String fileLocation) {
         println "<====================================Register=========================================================>"
-        UserDetail userDetail = new UserDetail(userDetailCOInstance)
+        UserDetail userDetail = new UserDetail()
+        userDetailCOInstance >> userDetail
             if (userDetailCOInstance.hasErrors()) {
                 throw new ValidationException("User Detail is not valid", userDetailCOInstance.errors)
             }else if (userDetail.save()) {
@@ -29,6 +33,38 @@ class UserService {
             }
 
         return null
+    }
+
+    Map updateProfile(UserProfileCO profileCO,String fileLocation) {
+        println "<====================================Update Profile=========================================================>"
+        UserDetail userDetail = UserDetail.load(profileCO.userId )
+        profileCO >> userDetail
+        if (profileCO.hasErrors()) {
+            throw new ValidationException("User Detail is not valid", profileCO.errors)
+        }else if (userDetail.save()) {
+            if(profileCO.photo.originalFilename) {
+                fileService.upload(profileCO.photo, fileLocation)
+            }
+            return [photo:userDetail.photo,username:userDetail.username]
+        } else {
+            throw new ValidationException("User Detail is not valid", userDetail.errors)
+        }
+
+        return null
+    }
+    Boolean updatePassword(UserPasswordCO passwordCO) {
+        println "<====================================Update Password=========================================================>"
+        UserDetail userDetail = UserDetail.load(passwordCO.userId)
+        passwordCO >> userDetail
+        if (passwordCO.hasErrors()) {
+            throw new ValidationException("User Detail is not valid", passwordCO.errors)
+        }else if (userDetail.save()) {
+            return true
+        } else {
+            throw new ValidationException("User Detail is not valid", userDetail.errors)
+        }
+
+        return false
     }
 
     @Transactional(readOnly = true)
@@ -67,13 +103,29 @@ class UserService {
         [topicSubscription:subscriptionList,users:[UserDetail.get(user?.id)],posts:inbox.posts,count:inbox.count ,topicList:topicService.listTrendingTopis("today")]
     }
 
+    @Transactional(readOnly = true)
+    Map<String,Object> profile(Map user,Map criteria){
+        println "<====================================Profile=========================================================>"
+        UserDetail userDetail = UserDetail.load(user?.id)
+        List<Topic> topicList = topicService.listMyTopics(userDetail,[max:5])
+        return [users:[userDetail],topicList: topicList, count: topicList.size()]
+    }
+    @Transactional(readOnly = true)
+    Map<String,Object> userProfile(UserDetail user,Map criteria){
+        println "<====================================Profile=========================================================>"
+//        UserDetail userDetail = UserDetail.load(user?.id)
+        List<Topic> topicList = topicService.listUserTopics(user,[max:5])
+        List<Resource> resourceList = topicService.listUserPosts(user,[max:5])
+        return [users:[user],topicList: topicList,posts:resourceList]
+    }
+
     Map<String,Object> inbox(Map user,Map criteria){
         println "<====================================Inbox=========================================================>"
         String hql = '''from Resource r join  r.topic t join t.subscription s join s.userDetail u
                                    where r.id not in
                                      (select r1.id from Resource r1 join r1.readingItem rd join r1.topic t1 join t1.subscription s1
                                          where rd.userDetail.id = :id
-                                         )and u.id = :id group by r.id'''
+                                         )and u.id = :id group by r.id order by r.id desc'''
         List<Object> resourceList = Resource.executeQuery(hql,[id:user.id.toLong(),max : criteria.max?:5, offset: criteria.offset?:0])
 
         int count = Resource.executeQuery(hql,[id:user.id.toLong()])?.size()

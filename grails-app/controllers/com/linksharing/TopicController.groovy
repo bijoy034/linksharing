@@ -12,6 +12,9 @@ class TopicController {
     static allowedMethods = [save: "POST"]
 
     def index(){}
+    def search(String search){
+        [searchList:topicService.searchList(search),topicList:topicService.listTrendingTopis("today"),posts:topicService.listTopPost("today")]
+    }
     def list(Integer max, Topic topicInstance ) {
         try {
             params.max = Math.min(max ?: 2, 100)

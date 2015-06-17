@@ -6,22 +6,13 @@ import org.springframework.web.multipart.MultipartFile
 
 
 @Validateable
-class UserDetailCO {
-    String email
-    String username
+class UserPasswordCO {
+    Long userId
     String password
     String confirmPassword
-    String firstName
-    String lastName
-    MultipartFile photo
 
     void rightShift(UserDetail userDetail){
-        userDetail.email = this.email
-        userDetail.username = this.username
         userDetail.password = this.password
-        userDetail.firstName = this.firstName
-        userDetail.lastName = this.lastName
-        userDetail.photo = this.photo.originalFilename
     }
 
     static constraints = {
@@ -32,7 +23,6 @@ class UserDetailCO {
             }
             return true
         }
-        email(unique: "username")
         importFrom(UserDetail)
     }
 

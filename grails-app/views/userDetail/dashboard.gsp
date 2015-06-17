@@ -10,10 +10,10 @@
 <body>
     <div class="widget-area-3 sidebar">
         <div class="widget kopa-article-list-widget">
-            <g:render template="/layouts/user_profile"/>
+            <g:render template="/userDetail/user_profile"/>
         </div>
         <div class="widget kopa-article-list-widget">
-            <h3 class="widget-title"><span class="title-line"></span><span class="title-text">Subscription</span></h3>
+            <h3 class="widget-title" style="margin-bottom: 3px;"><span class="title-line"></span><span class="title-text">Subscription</span></h3>
             <g:render template="dashboard_subscription_list"/>
         </div><!--kopa-article-list-widget-->
 

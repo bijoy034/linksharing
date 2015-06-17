@@ -13,34 +13,7 @@
     <g:if test="${posts.size() > 0}">
         <ul>
             <g:each in="${posts}" status="i" var="post">
-                <%
-                   /* Topic topic = post[1]
-                    UserDetail userDetail = post[3]*/
-                %>
-               %{-- <li >
-                    <article class="entry-item clearfix">
-                        <div class="entry-thumb" style="width: 10%;float: left;"> <a href="#"><img src="${resource(dir: 'images/profile',file:"${userDetail.photo?:'user.png'}")}" alt=""/></a> </div>
-                        <div class="entry-content" style="width: 80%;float:left;">
-                            <h4 class="entry-title">
-                                <a href="#">${userDetail.firstName+" "+userDetail.lastName}</a>
-                                <label style="color:#B2B2B2;display: inline;">@${userDetail.username}</label>
-                                <label style="color:#B2B2B2;display: inline;">
-                                    <c:postTime post="${post[0]}" format="MMMM dd, yyyy"/>
-                                </label>
-                            </h4>
-                            <a href="#">${topic.name}</a>
-                            <p class="entry-description">${post[0].description}</p>
-                            <span class="entry-date">
-                                <a href="#"><asset:image src="placeholders/facebook-icon.png" alt="" /></a>
-                                <a href="#"><asset:image src="placeholders/Linkedin.png" alt="" /></a>
-                                <a href="#"><asset:image src="placeholders/googleplus.png" alt="" /></a>
-                                <div class="modify">
-                                    <c:resourceFooter post="${post[0]}" user="${session.user}"/>
-                                </div>
-                            </span>
-                        </div>
-                    </article>
-                </li>--}%
+
                 <li>
                     <article class="entry-item clearfix" >
                         <div class="entry-content" >

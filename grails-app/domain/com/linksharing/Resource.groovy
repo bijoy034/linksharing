@@ -38,4 +38,21 @@ class Resource{
         readingItem nullable: true
         resourceRating nullable: true
     }
+
+    static namedQueries = {
+        topPosts{ Date date = null ->
+            projections {
+                "resourceRating"{
+                    avg("score","avgScore")
+                    groupProperty("resource")
+                }
+                order("avgScore","desc")
+                order("dateCreated","desc")
+            }
+            if(date){
+                ge("dateCreated",date.clearTime())
+                le("dateCreated",new Date())
+            }
+        }
+    }
 }

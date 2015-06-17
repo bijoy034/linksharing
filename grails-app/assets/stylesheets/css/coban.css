@@ -43,6 +43,8 @@ blockquote {
 .list-container-3 ul li.active a, 
 .list-container-3 ul li:hover a {
 	border-top:1px solid #3d3d8b;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 .red-button, .border-button:hover,
 #comments-form #comment_name:focus, 

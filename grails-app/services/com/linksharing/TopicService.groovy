@@ -37,7 +37,18 @@ class TopicService {
         topics
 
     }
-
+    @Transactional(readOnly = true)
+    List<Topic> listMyTopics(UserDetail user,Map criteria = [:]) {
+        Topic.findAllByCreatedBy(user,criteria)
+    }
+    @Transactional(readOnly = true)
+    List<Topic> listUserTopics(UserDetail user,Map criteria = [:]) {
+        Topic.findAllByCreatedByAndVisibility(user,Visibility.Public,criteria)
+    }
+    @Transactional(readOnly = true)
+    List<Resource> listUserPosts(UserDetail user,Map criteria = [:]) {
+        Resource.findAllByCreatedBy(user,criteria)
+    }
     @Transactional(readOnly = true)
     Map listTopicWithPost(Topic topicInstance,Map user,Map criteria = [:]) {
         List<Topic> topicList = listAllDistinctTopic(user,criteria)
@@ -49,7 +60,6 @@ class TopicService {
                 post = topicList[0].resource as List
             }
             int size = Topic.listTopic(user?.id as Long).listDistinct().size()
-            println(size)
             return [topicList: topicList, posts: post, count: size]
 
         }else{
@@ -72,6 +82,39 @@ class TopicService {
 
         }
         Subscription.trendingTopics(date).listDistinct([max:5])
+    }
+
+    List<Topic> listTopPost(String day = null){
+        Date date
+        if(day){
+            if(day == "today"){
+                date = new Date()
+            }
+            else if(day == "week"){
+                date = CustomDate.firstDayInWeek(new Date())
+            }else if(day == "month"){
+                date = CustomDate.firstDayInMonth(new Date())
+            }else if(day == " year"){
+                date = CustomDate.firstDayInYear()
+            }
+
+        }
+        Resource.topPosts(date).listDistinct([max:5])
+    }
+
+    List<Topic> searchList(String filter = null){
+        if(filter) {
+            Topic.createCriteria().listDistinct {
+                or {
+                    ilike("name", "%${filter}%")
+                   /* "resource" {
+                        ilike("description", "%${filter}%")
+                    }*/
+                }
+            }
+        }else{
+            Topic.findAllByVisibility(Visibility.Public)
+        }
     }
 
     @Transactional(readOnly = true)

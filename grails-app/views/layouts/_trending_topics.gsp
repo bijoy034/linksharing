@@ -1,39 +1,35 @@
 
-        <ul>
+        <ul style="padding-bottom: 20px;">
 <g:each in="${topicList}" status="i" var="topic">
             <li>
                 <article class="entry-item clearfix">
-                    <div class="entry-thumb" style="width:10%;float: left;">
-                        <a href="#">
-                            <img src="${resource(dir: 'images/profile',file:"${topic.createdBy.photo?:'user.png'}")}" alt="" />
-                        </a>
-                    </div>
-                    <div class="entry-content" style="width:80%;float: left">
-                        <p class="entry-description">${topic.name}</p>
-                        <p class="entry-description">
-                            <span class="entry-date" style="float: right;">
-                                <g:formatDate format="MMMM dd, yyyy" date="${topic.dateCreated}"/>
-                            </span>
-                        </p>
-                        <p class="entry-description">
-                            Subscription : <a href="#">${topic.subscription.size()}</a>&nbsp;&nbsp;Posts : <a href="#">${topic.resource.size()}</a>
-                        </p>
-                        <p class="entry-description" style="text-align: right">
-                            <b>${topic.createdBy.firstName+" "+topic.createdBy.lastName}</b>
-                            /
-                            <i>@${topic.createdBy.username}</i>
-                        </p>
-
-                        <span class="entry-date">
-                            <a href="#"><asset:image src="placeholders/facebook-icon.png"/></a>
-                            <a href="#"><asset:image src="placeholders/Linkedin.png" alt=""/></a>
-                            <a href="#"><asset:image src="placeholders/googleplus.png" alt=""/></a>
-
-                            <div class="modify">
-                                <g:link controller="topic" action="show" id="${topic.id}">View Posts</g:link>
-                            </div>
-                        </span>
-                    </div>
+                    <table style="width: 100%;">
+                        <tr class="entry-content show-text" style="height: 40px">
+                            <td style="font-size: 20px;text-align: left;" colspan="2">
+                                <g:link controller="topic" action="show" id="${topic.id}">${topic.name}</g:link>
+                                <br>
+                                <label style="color: #B2B2B2;display: block;width: 100%;text-align: right;">
+                                    <b style="border-bottom:1px solid #CCC;">&nbsp;&nbsp;Creation Date&nbsp;&nbsp;</b>
+                                    <br>
+                                    <asset:image src="placeholders/clock.png"/>
+                                    <g:formatDate format="MMMM dd, yyyy" date="${topic.dateCreated}"/>
+                                    &nbsp;
+                                </label>
+                            </td>
+                        </tr>
+                        <c:updateTopicForm  topic="${topic}" user="${session.user}"/>
+                        <tr class="entry-content">
+                            <td>
+                                Subscriptions : <a href="href">${topic.subscription.size()}</a>
+                                Post : <a href="href">${topic.resource.size()}</a>
+                            </td>
+                            <td style="text-align: right;">
+                                <c:subscribeLink topic="${topic}" user="${session.user}" />
+                            </td>
+                        </tr>
+                    </table>
+                    <c:topicCreatedByDetail topic="${topic}"/>
+                    <c:sharingOptions />
                 </article>
             </li>
 </g:each>

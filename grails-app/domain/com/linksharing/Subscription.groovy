@@ -33,12 +33,9 @@ class Subscription {
                 order("countTopic","desc")
             }
             if(date){
-//                between("dateCreated",date.clearTime(),new Date())
                 ge("dateCreated",date.clearTime())
                 le("dateCreated",new Date())
             }
         }
-
-
     }
 }

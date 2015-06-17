@@ -82,9 +82,9 @@ class SubscriptionController {
        redirect(url: '/dashboard')
     }
 
-    def unRead(ReadingItem readingItem) {
+    def unRead(Long id) {
         try{
-            subscriptionService.unReadResource(readingItem)
+            subscriptionService.unReadResource(id,session.user as Map)
             flash.message = "Item unread!"
         }catch(Throwable e){
             flash.message = e.getMessage()
